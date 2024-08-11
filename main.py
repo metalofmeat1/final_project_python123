@@ -6,8 +6,7 @@ app = Flask(__name__)
 test_data = {
   "events": [
     {
-      "year": 1000,
-    #   Координати мітки.
+      "year": 1799,
       "location": [50.4501, 30.5234], 
       "title": "Тест",
       "description": "Опис",
