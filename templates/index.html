@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Map</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    
+    <style>
+        #timeline {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .range-container {
+            margin: 10px;
+        }
+        .range-container input {
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map" style="height: 600px;"></div>
+    <div id="search">
+        <label for="searchYear">Search Year:</label>
+        <input type="number" id="searchYear" min="1000" max="2000" value="2000">
+        <button id="searchButton">Search</button>
+    </div>
+    <div id="timeline">
+        <div class="range-container">
+            <label for="startYear">Start Year:</label>
+            <input type="range" id="startYear" min="1000" max="2000" step="1" value="1000">
+            <span id="startYearLabel">1000</span>
+        </div>
+        <div class="range-container">
+            <label for="endYear">End Year:</label>
+            <input type="range" id="endYear" min="1000" max="2000" step="1" value="2000">
+            <span id="endYearLabel">2000</span>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
