@@ -57,6 +57,14 @@
     <div class="search-container">
         <form action="/search" method="GET">
             <input type="text" placeholder="Пошук..." name="query">
+
+
+            <select name="filter">
+                <option value="">Усі</option>
+                <option value="battles">Битви</option>
+                <option value="political_changes">Політичні зміни</option>
+                <option value="discoveries">Відкриття</option>
+            </select>
             <button type="submit">Шукати</button>
         </form>
     </div>
