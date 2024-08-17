@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>Карта історичних подій</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
     <h1>Карта історичних подій</h1>
-    <div id="map"></div>
+    <div id="map" style="height: 600px;"></div>
 
     <h2>Виберіть період часу</h2>
     <div id="timelineContainer">
@@ -26,8 +26,6 @@
         <label for="description">Опис:</label>
         <textarea id="description" name="description" required></textarea>
 
-        <label for="category">Категорія:</label>
-        <input type="text" id="category" name="category" placeholder="Наприклад, війна, подія тощо" required>
 
         <label for="date">Дата:</label>
         <input type="date" id="date" name="date" required>
