@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивна карта</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+
+    <div id="map" style="height: 600px;"></div>
+
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+
+        var map = L.map('map').setView([49.8397, 24.0297], 13);
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Додавання мітки на карту з текстом українською мовою
+        var marker1 = L.marker([49.8397, 24.0297]).addTo(map)
+            .bindPopup("<b>Львів</b><br>Історична подія: битва під Левом").openPopup();
+
+        // Додавання кола для виділення області
+        var circle = L.circle([49.8397, 24.0297], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 10
+        }).addTo(map).bindPopup;
+
+
+        var marker2 = L.marker([49.9999, 25.0297]).addTo(map)
+            .bindPopup("<b>нннннн</b><br>Історична подія: ррррррр").openPopup();
+    </script>
+</body>
+</html>
+
