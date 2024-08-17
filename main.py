@@ -28,8 +28,10 @@ def get_events_from_db():
             }
         }
         events.append(event)
-    
+
     return {"events": events}
+
+
 
 @app.route('/')
 def index():
