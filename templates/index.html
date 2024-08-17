@@ -11,23 +11,29 @@
     <div id="filters">
         <div id="search">
             <label for="searchYear">Year:</label>
-            <input type="number" id="searchYear" min="1000" max="2000" value="2000">
+            <input type="number" id="searchYear" min="1000" max="2024" value="2000">
             <button id="searchButton">Search</button>
         </div>
         <div id="timeline">
             <div class="range-container">
                 <label for="startYear">Start:</label>
-                <input type="range" id="startYear" min="1500" max="2000" step="1" value="1000">
-                <span id="startYearLabel">1500</span>
+                <input type="range" id="startYear" min="1000" max="2024" step="1" value="1000">
+                <span id="startYearLabel">1000</span>
             </div>
             <div class="range-container">
                 <label for="endYear">End:</label>
-                <input type="range" id="endYear" min="1000" max="2000" step="1" value="2000">
+                <input type="range" id="endYear" min="1000" max="2024" step="1" value="2024">
                 <span id="endYearLabel">2024</span>
             </div>
         </div>
     </div>
     <div id="map"></div>
+    <button id="toggleSidebar">☰</button>
+    <div id="sidebar">
+        <h2>Filtered Results</h2>
+        <div id="resultsContainer"></div>
+    </div>
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
