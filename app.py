@@ -19,11 +19,13 @@ def init_db():
     conn.close()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    search_query = request.form.get('query')
+    return render_template('index.html', query=search_query)
 
 
+@app.route('/')
 @app.route('/api/events', methods=['GET'])
 def get_events():
     start_date = request.args.get('start')
