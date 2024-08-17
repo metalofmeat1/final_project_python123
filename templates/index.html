@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Карта історичних подій</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body class="{% if session.get('theme') == 'dark' %}dark-theme{% endif %}">
+    <div id="mapContainer">
+        <div id="map"></div>
+    </div>
+
+    <div class="header-panel">
+        <h1 class="main-title">Карта історичних подій</h1>
+    </div>
+
+    <div id="loginSuccessNotification" class="notification">
+        Logged in successfully!
+    </div>
+
+    <div id="accountSidebar" class="sidebar">
+        <button id="closeSidebar" class="close-btn">&times;</button>
+        <h3 class="sidebar-title">PROFILE</h3>
+        <div class="avatar-section">
+            <div id="avatar" class="avatar-placeholder" style="background-image: url({{ url_for('static', filename='uploads/' + user_avatar) }});"></div>
+            <input type="file" id="uploadAvatar" accept="image/*" style="display: none;">
+        </div>
+        <p class="username">{{ username }}</p>
+
+        <button id="changePasswordBtn" class="btn-change-password" onclick="location.href='{{ url_for('change_password') }}'">Змінити пароль</button>
+
+        <h3>Theme</h3>
+        <div class="theme-selection">
+            <label>
+                <input type="radio" name="theme" value="light" {% if session.get('theme') != 'dark' %}checked{% endif %}> Light
+            </label><br>
+            <label>
+                <input type="radio" name="theme" value="dark" {% if session.get('theme') == 'dark' %}checked{% endif %}> Dark
+            </label>
+        </div>
+    </div>
+
+    <div id="collapsedSidebar" class="collapsed-sidebar">Profile</div>
+
+    <div class="timeline-container">
+        <h2>Виберіть період часу</h2>
+        <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024" oninput="updateTimelineLabel(this.value)">
+        <span id="timelineLabel">2024</span>
+    </div>
+
+    <h2>Додати нову подію</h2>
+    <form id="addEventForm">
+        <label for="name">Назва:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="description">Опис:</label><br>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="date">Дата:</label><br>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="latitude">Широта:</label><br>
+        <input type="text" id="latitude" name="latitude" required><br><br>
+
+        <label for="longitude">Довгота:</label><br>
+        <input type="text" id="longitude" name="longitude" required><br><br>
+
+        <button type="submit">Зберегти подію</button>
+    </form>
+
+    <script>
+        var map = L.map('map').setView([50.4501, 30.5234], 6);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        document.getElementById("avatar").addEventListener("click", function() {
+            document.getElementById("uploadAvatar").click();
+        });
+
+        document.getElementById("uploadAvatar").addEventListener("change", function(e) {
+            var file = e.target.files[0];
+            if (!file) return;
+
+            var formData = new FormData();
+            formData.append('avatar', file);
+
+            fetch('/upload_avatar', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.text())
+            .then(() => {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById("avatar").style.backgroundImage = `url(${event.target.result})`;
+                    document.getElementById("avatar").classList.remove("avatar-placeholder");
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        document.getElementById("closeSidebar").onclick = function() {
+            document.getElementById("accountSidebar").style.display = 'none';
+            document.getElementById("collapsedSidebar").style.display = 'flex';
+        }
+
+        document.getElementById("collapsedSidebar").onclick = function() {
+            document.getElementById("accountSidebar").style.display = 'flex';
+            document.getElementById("collapsedSidebar").style.display = 'none';
+        }
+
+        function updateTimelineLabel(year) {
+            document.getElementById('timelineLabel').textContent = year;
+            loadEventsForYear(year);
+        }
+
+        function loadEventsForYear(year) {
+            fetch(`/api/events?year=${year}`)
+                .then(response => response.json())
+                .then(events => {
+                    map.eachLayer(function (layer) {
+                        if (layer instanceof L.Marker) {
+                            map.removeLayer(layer);
+                        }
+                    });
+                    events.forEach(event => {
+                        L.marker([event[4], event[5]]).addTo(map)
+                            .bindPopup(`<b>${event[1]}</b><br>${event[2]}<br>${event[3]}`);
+                    });
+                })
+                .catch(error => console.error('Error loading events:', error));
+        }
+
+        map.on('click', function(e) {
+            document.getElementById('latitude').value = e.latlng.lat;
+            document.getElementById('longitude').value = e.latlng.lng;
+        });
+
+        document.getElementById('addEventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var eventData = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                date: document.getElementById('date').value,
+                latitude: parseFloat(document.getElementById('latitude').value),
+                longitude: parseFloat(document.getElementById('longitude').value)
+            };
+
+            fetch('/api/add_event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(eventData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    L.marker([eventData.latitude, eventData.longitude]).addTo(map)
+                        .bindPopup(`<b>${eventData.name}</b><br>${eventData.description}<br>${eventData.date}`);
+                }
+            })
+            .catch(error => console.error('Error adding event:', error));
+        });
+
+        function showNotification() {
+            const notification = document.getElementById('loginSuccessNotification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        {% if success_login %}
+        showNotification();
+        {% endif %}
+
+        document.querySelectorAll('input[name="theme"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const selectedTheme = this.value;
+                document.body.classList.toggle('dark-theme', selectedTheme === 'dark');
+
+                fetch('/set_theme', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ 'theme': selectedTheme })
+                });
+            });
+        });
+
+        loadEventsForYear(document.getElementById('timeline').value);
+    </script>
+</body>
+</html>
+
+
+
+
+
