@@ -147,3 +147,55 @@ button:hover {
 .search-container button:hover {
     background-color: #ff4f41;
 }
+
+        .dark-theme body {
+    background-color: #333;
+    color: #f4f4f4;
+}
+
+.dark-theme h1, .dark-theme h2 {
+    color: #f4f4f4;
+}
+
+.dark-theme #map {
+    border-color: #555;
+}
+
+.dark-theme form {
+    background-color: #444;
+    border-color: #555;
+}
+
+.dark-theme input[type="text"],
+.dark-theme input[type="date"],
+.dark-theme textarea {
+    background-color: #555;
+    color: #f4f4f4;
+    border-color: #666;
+}
+
+.dark-theme button {
+    background-color: #007BFF;
+    color: white;
+}
+
+.dark-theme button:hover {
+    background-color: #0056b3;
+}
+
+.dark-theme .search-container {
+    background-color: #222;
+}
+
+.dark-theme .search-container input[type="text"] {
+    background-color: #444;
+    color: #f4f4f4;
+}
+
+.dark-theme .search-container button {
+    background-color: #ff6f61;
+}
+
+.dark-theme .search-container button:hover {
+    background-color: #ff4f41;
+}

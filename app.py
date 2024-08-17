@@ -3,7 +3,6 @@ import sqlite3
 
 app = Flask(__name__)
 
-
 def init_db():
     conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
@@ -19,24 +18,19 @@ def init_db():
     conn.commit()
     conn.close()
 
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    search_query = request.form.get('query')
-    return render_template('index.html', query=search_query)
-
-
 @app.route('/')
+def index():
+    return render_template('index.html')
+
 @app.route('/api/events', methods=['GET'])
 def get_events():
     year = request.args.get('year')
-    conn = sqlite3.connect('history_test.db')
+    conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM events WHERE date LIKE ?", (f'{year}%',))
     events = cursor.fetchall()
     conn.close()
     return jsonify(events)
-
 
 @app.route('/api/add_event', methods=['POST'])
 def add_event():
@@ -71,7 +65,6 @@ def search_events():
     conn.close()
 
     return jsonify(events)
-
 
 if __name__ == '__main__':
     init_db()
