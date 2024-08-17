@@ -8,150 +8,122 @@
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5.2.0/dist/iro.min.js"></script>
     <style id="themeStyle">
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        h1, h2 {
-            color: #555;
-            text-align: center;
-        }
-
-        #map {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin: 20px auto;
-        }
-
-        #timelineContainer {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        #timeline {
-            width: 80%;
-            max-width: 500px;
-            margin: 10px 0;
-        }
-
-        #timelineInput {
-            width: 80px;
-            text-align: center;
-            margin-left: 10px;
-        }
-
-        form {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .leaflet-popup-content {
-            font-family: Arial, sans-serif;
-            color: #333;
-        }
-
-        .dark-theme body {
-            background-color: #333;
-            color: #f9f9f9;
-        }
-
-        .dark-theme form {
-            background: #444;
-            border-color: #555;
-        }
-
-        .dark-theme input[type="text"],
-        .dark-theme input[type="date"],
-        .dark-theme textarea {
-            background: #555;
-            color: #f9f9f9;
-            border-color: #666;
-        }
-
-        .dark-theme button {
-            background-color: #007BFF;
-            color: #f9f9f9;
-        }
-
-        .dark-theme button:hover {
-            background-color: #0056b3;
-        }
-
-        .theme-toggle-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .theme-toggle-btn:hover {
-            background-color: #0056b3;
-        }
-        <style>
-    body {
-    margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    color: #4a4a4a;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#map {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+#map:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#timelineContainer {
+    margin: 20px 0;
+    text-align: center;
+}
+
+#timeline {
+    width: 80%;
+    max-width: 500px;
+    margin: 10px 0;
+}
+
+#timelineInput {
+    width: 100px;
+    text-align: center;
+    margin-left: 10px;
+}
+
+form {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.theme-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-btn:hover {
+    background-color: #0056b3;
 }
 
 .search-container {
-    width: 100%;
     background-color: #333;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 .search-container form {
@@ -161,27 +133,82 @@
 }
 
 .search-container input[type="text"] {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     border: none;
     border-radius: 4px 0 0 4px;
     font-size: 16px;
     outline: none;
+    box-sizing: border-box;
 }
 
 .search-container button {
-    padding: 10px;
+    padding: 10px 15px;
     background-color: #ff6f61;
     color: white;
     border: none;
     border-radius: 0 4px 4px 0;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .search-container button:hover {
     background-color: #ff4f41;
 }
+
+        .dark-theme body {
+    background-color: #333;
+    color: #f4f4f4;
+}
+
+.dark-theme h1, .dark-theme h2 {
+    color: #f4f4f4;
+}
+
+.dark-theme #map {
+    border-color: #555;
+}
+
+.dark-theme form {
+    background-color: #444;
+    border-color: #555;
+}
+
+.dark-theme input[type="text"],
+.dark-theme input[type="date"],
+.dark-theme textarea {
+    background-color: #555;
+    color: #f4f4f4;
+    border-color: #666;
+}
+
+.dark-theme button {
+    background-color: #007BFF;
+    color: white;
+}
+
+.dark-theme button:hover {
+    background-color: #0056b3;
+}
+
+.dark-theme .search-container {
+    background-color: #222;
+}
+
+.dark-theme .search-container input[type="text"] {
+    background-color: #444;
+    color: #f4f4f4;
+}
+
+.dark-theme .search-container button {
+    background-color: #ff6f61;
+}
+
+.dark-theme .search-container button:hover {
+    background-color: #ff4f41;
+}
+
 
     </style>
 </head>
@@ -203,6 +230,9 @@
 
         <label for="description">Опис:</label>
         <textarea id="description" name="description" required></textarea>
+
+         <label for="category">Категорія:</label>
+        <input type="text" id="category" name="category" placeholder="Наприклад, війна, подія тощо" required>
 
         <label for="date">Дата:</label>
         <input type="date" id="date" name="date" required>
@@ -234,86 +264,115 @@
     </div>
     <script>
         var map = L.map('map').setView([50.4501, 30.5234], 6);
+var allEvents = []; // Зберігаємо всі події тут
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-        }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+}).addTo(map);
 
-        function updateTimelineLabel(year) {
-            document.getElementById('timelineLabel').textContent = year;
-            document.getElementById('timelineInput').value = year;
-            loadEventsForYear(year);
-        }
+function updateTimelineLabel(year) {
+    document.getElementById('timelineLabel').textContent = year;
+    document.getElementById('timelineInput').value = year;
+    filterEventsByYear(year); // Фільтруємо події за роком
+}
 
-        function updateTimelineFromInput() {
-            var year = document.getElementById('timelineInput').value;
-            if (year >= 1000 && year <= 2024) {
-                document.getElementById('timeline').value = year;
-                updateTimelineLabel(year);
-            }
-        }
+function updateTimelineFromInput() {
+    var year = document.getElementById('timelineInput').value;
+    if (year >= 1000 && year <= 2024) {
+        document.getElementById('timeline').value = year;
+        updateTimelineLabel(year);
+    }
+}
 
-        function loadEventsForYear(year) {
-            fetch(`/api/events?year=${year}`)
-                .then(response => response.json())
-                .then(events => {
-                    map.eachLayer(function (layer) {
-                        if (layer instanceof L.Marker) {
-                            map.removeLayer(layer);
-                        }
-                    });
-                    events.forEach(event => {
-                        L.marker([event.latitude, event.longitude]).addTo(map)
-                            .bindPopup(`<b>${event.name}</b><br>${event.description}<br>${event.date}`);
-                    });
-                });
-        }
-
-        map.on('click', function(e) {
-            document.getElementById('latitude').value = e.latlng.lat;
-            document.getElementById('longitude').value = e.latlng.lng;
+function loadEventsForYear(year) {
+    fetch(`/api/events?year=${year}`)
+        .then(response => response.json())
+        .then(events => {
+            allEvents = events; // Зберігаємо події у змінну
+            filterEventsByYear(year); // Відображаємо події за вибраний рік
         });
+}
 
-        document.getElementById('addEventForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var eventData = {
-                name: document.getElementById('name').value,
-                description: document.getElementById('description').value,
-                date: document.getElementById('date').value,
-                latitude: parseFloat(document.getElementById('latitude').value),
-                longitude: parseFloat(document.getElementById('longitude').value)
-            };
+function filterEventsByYear(year) {
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+        }
+    });
 
-            fetch('/api/add_event', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(eventData),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    L.marker([eventData.latitude, eventData.longitude]).addTo(map)
-                        .bindPopup(`<b>${eventData.name}</b><br>${eventData.description}<br>${eventData.date}`);
+    allEvents.forEach(event => {
+        if (event.date.startsWith(year)) {
+            L.marker([event.latitude, event.longitude]).addTo(map)
+                .bindPopup(`<b>${event.name}</b><br>${event.description}<br>${event.date}`);
+        }
+    });
+}
+
+function handleSearchFormSubmit(e) {
+    e.preventDefault();
+    var query = document.querySelector('.search-container input[name="query"]').value;
+    var filter = document.querySelector('.search-container select[name="filter"]').value;
+
+    fetch(`/api/search?query=${encodeURIComponent(query)}&filter=${encodeURIComponent(filter)}`)
+        .then(response => response.json())
+        .then(results => {
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
                 }
             });
+
+            results.forEach(result => {
+                L.marker([result[4], result[5]]).addTo(map) // Latitude and Longitude are in 4th and 5th positions respectively
+                    .bindPopup(`<b>${result[1]}</b><br>${result[2]}<br>${result[3]}`); // Name, Description, Date are in 1st, 2nd, and 3rd positions respectively
+            });
         });
+}
 
-        loadEventsForYear(document.getElementById('timeline').value);
 
-        function toggleTheme() {
-            var body = document.body;
-            var themeButton = document.querySelector('.theme-toggle-btn');
+function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+}
 
-            if (body.classList.contains('dark-theme')) {
-                body.classList.remove('dark-theme');
-                themeButton.textContent = '🌙';
-            } else {
-                body.classList.add('dark-theme');
-                themeButton.textContent = '☀️';
-            }
+map.on('click', function(e) {
+    document.getElementById('latitude').value = e.latlng.lat;
+    document.getElementById('longitude').value = e.latlng.lng;
+});
+
+document.getElementById('addEventForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var eventData = {
+        name: document.getElementById('name').value,
+        description: document.getElementById('description').value,
+        date: document.getElementById('date').value,
+        latitude: parseFloat(document.getElementById('latitude').value),
+        longitude: parseFloat(document.getElementById('longitude').value),
+        category: document.getElementById('category').value
+    };
+
+    fetch('/api/add_event', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            allEvents.push(eventData);
+            L.marker([eventData.latitude, eventData.longitude]).addTo(map)
+                .bindPopup(`<b>${eventData.name}</b><br>${eventData.description}<br>${eventData.date}`);
         }
+    });
+});
+
+document.querySelector('.search-container form').addEventListener('submit', handleSearchFormSubmit);
+
+loadEventsForYear(document.getElementById('timeline').value);
+
+
+
     </script>
 
 </body>

@@ -13,7 +13,8 @@ def init_db():
                         description TEXT,
                         date TEXT,
                         latitude REAL,
-                        longitude REAL
+                        longitude REAL,
+                        category TEXT  
                       )''')
     conn.commit()
     conn.close()
@@ -28,11 +29,10 @@ def index():
 @app.route('/')
 @app.route('/api/events', methods=['GET'])
 def get_events():
-    start_date = request.args.get('start')
-    end_date = request.args.get('end')
-    conn = sqlite3.connect('history.db')
+    year = request.args.get('year')
+    conn = sqlite3.connect('history_test.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM events WHERE date BETWEEN ? AND ?", (start_date, end_date))
+    cursor.execute("SELECT * FROM events WHERE date LIKE ?", (f'{year}%',))
     events = cursor.fetchall()
     conn.close()
     return jsonify(events)
@@ -43,11 +43,34 @@ def add_event():
     data = request.json
     conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO events (name, description, date, latitude, longitude) VALUES (?, ?, ?, ?, ?)",
-                   (data['name'], data['description'], data['date'], data['latitude'], data['longitude']))
+    cursor.execute(
+        "INSERT INTO events (name, description, date, latitude, longitude, category) VALUES (?, ?, ?, ?, ?, ?)",
+        (data['name'], data['description'], data['date'], data['latitude'], data['longitude'], data['category']))
     conn.commit()
     conn.close()
     return jsonify({"status": "success"}), 201
+
+
+@app.route('/api/search', methods=['GET'])
+def search_events():
+    query = request.args.get('query', '')
+    filter = request.args.get('filter', '')
+
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+
+    sql_query = "SELECT * FROM events WHERE name LIKE ?"
+    params = [f'%{query}%']
+
+    if filter:
+        sql_query += " AND category = ?"
+        params.append(filter)
+
+    cursor.execute(sql_query, params)
+    events = cursor.fetchall()
+    conn.close()
+
+    return jsonify(events)
 
 
 if __name__ == '__main__':

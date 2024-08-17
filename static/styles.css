@@ -1,5 +1,5 @@
 body {
-    font-family: 'Georgia', serif;
+    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     color: #333;
     margin: 0;
@@ -8,8 +8,8 @@ body {
 
 h1, h2 {
     color: #4a4a4a;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 10px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #map {
@@ -18,6 +18,11 @@ h1, h2 {
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+#map:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #timelineContainer {
@@ -27,12 +32,14 @@ h1, h2 {
 
 #timeline {
     width: 80%;
+    max-width: 500px;
     margin: 10px 0;
 }
 
 #timelineInput {
     width: 100px;
     text-align: center;
+    margin-left: 10px;
 }
 
 form {
@@ -41,7 +48,8 @@ form {
     border-radius: 8px;
     padding: 20px;
     max-width: 600px;
-    margin: 0 auto;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 label {
@@ -54,10 +62,11 @@ input[type="text"],
 input[type="date"],
 textarea {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 textarea {
@@ -70,25 +79,71 @@ button {
     color: white;
     border: none;
     padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
     border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
-.leaflet-popup-content {
-    font-family: 'Georgia', serif;
-    color: #333;
+.theme-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.error {
-    color: red;
-    font-weight: bold;
+.theme-toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+.search-container {
+    background-color: #333;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.search-container form {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-container input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.search-container button {
+    padding: 10px 15px;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.search-container button:hover {
+    background-color: #ff4f41;
 }
