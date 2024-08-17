@@ -37,7 +37,7 @@ def get_events_from_db():
 def index():
     return render_template('index.html')
 
-@app.route('/data')
+@app.route('/api/data')
 def get_data():
     data = get_events_from_db()
     return jsonify(data)

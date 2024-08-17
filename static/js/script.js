@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let allEvents = []; // тут всі події, потім ми їх сортуємо
 
-  fetch("/data") // приймаємо події
+  fetch("/api/data") // приймаємо події
     .then((response) => response.json())
     .then((data) => {
       console.log("Data received:", data); // просто перевірка які данні отримали
