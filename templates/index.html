@@ -47,7 +47,7 @@
     <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
 
     <div class="search-container">
-        <form action="/search" method="GET">
+        <form id="searchForm" action="/search" method="GET">
             <input type="text" placeholder="Пошук..." name="query">
             <select name="filter">
                 <option value="">Усі</option>
@@ -58,6 +58,7 @@
             <button type="submit">Шукати</button>
         </form>
     </div>
+    
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
