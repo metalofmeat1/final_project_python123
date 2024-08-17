@@ -39,9 +39,8 @@ function loadEventsForYear(year) {
 function handleSearchFormSubmit(e) {
     e.preventDefault();
     var query = document.querySelector('.search-container input[name="query"]').value;
-    var filter = document.querySelector('.search-container select[name="filter"]').value;
 
-    fetch(`/api/search?query=${encodeURIComponent(query)}&filter=${encodeURIComponent(filter)}`)
+    fetch(`/api/search?query=${encodeURIComponent(query)}`)
         .then(response => response.json())
         .then(results => {
             map.eachLayer(function (layer) {
@@ -54,8 +53,32 @@ function handleSearchFormSubmit(e) {
                 L.marker([result[4], result[5]]).addTo(map)
                     .bindPopup(`<b>${result[1]}</b><br>${result[2]}<br>${result[3]}`);
             });
+
+            displaySearchResults(results);
+        })
+        .catch(error => {
+            console.error('Ошибка поиска:', error);
         });
 }
+
+function displaySearchResults(events) {
+    const eventsList = document.getElementById('eventsList');
+    eventsList.innerHTML = '';
+    events.forEach(event => {
+        const eventElement = document.createElement('div');
+        eventElement.innerHTML = `
+            <h3>${event[1]}</h3>
+            <p><strong>Опис:</strong> ${event[2]}</p>
+            <p><strong>Дата:</strong> ${event[3]}</p>
+            <p><strong>Широта:</strong> ${event[4]}</p>
+            <p><strong>Довгота:</strong> ${event[5]}</p>
+            <p><strong>Категорія:</strong> ${event[6]}</p>
+        `;
+        eventsList.appendChild(eventElement);
+    });
+}
+
+document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
 
 function toggleTheme() {
     document.body.classList.toggle('dark-theme');
@@ -92,14 +115,11 @@ document.getElementById('addEventForm').addEventListener('submit', function(e) {
         description: document.getElementById('description').value,
         date: document.getElementById('date').value,
         latitude: parseFloat(document.getElementById('latitude').value),
-        longitude: parseFloat(document.getElementById('longitude').value),
-        category: document.getElementById('category').value
+        longitude: parseFloat(document.getElementById('longitude').value)
     };
 
     addEvent(eventData);
 });
-
-document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
 
 document.addEventListener('DOMContentLoaded', function() {
     loadEventsForYear(document.getElementById('timeline').value);

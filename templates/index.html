@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>Карта історичних подій</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
     <h1>Карта історичних подій</h1>
-    <div id="map"></div>
+    <div id="map" style="height: 600px;"></div>
 
     <h2>Виберіть період часу</h2>
     <div id="timelineContainer">
@@ -26,8 +26,6 @@
         <label for="description">Опис:</label>
         <textarea id="description" name="description" required></textarea>
 
-        <label for="category">Категорія:</label>
-        <input type="text" id="category" name="category" placeholder="Наприклад, війна, подія тощо" required>
 
         <label for="date">Дата:</label>
         <input type="date" id="date" name="date" required>
@@ -47,14 +45,8 @@
     <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
 
     <div class="search-container">
-        <form action="/search" method="GET">
-            <input type="text" placeholder="Пошук..." name="query">
-            <select name="filter">
-                <option value="">Усі</option>
-                <option value="battles">Битви</option>
-                <option value="political_changes">Політичні зміни</option>
-                <option value="discoveries">Відкриття</option>
-            </select>
+        <form id="searchForm">
+            <input type="text" placeholder="Пошук за назвою..." name="query">
             <button type="submit">Шукати</button>
         </form>
     </div>
