@@ -1,31 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // створення карти
-  const map = L.map("map").setView([50.4501, 30.5234], 10); // Координати і масштаб
+  const map = L.map("map").setView([50.4501, 30.5234], 10);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  let allEvents = []; // тут всі події, потім ми їх сортуємо
+  let allEvents = [];
 
-  fetch("/api/data") // приймаємо події
+  fetch("/api/data")
     .then((response) => response.json())
     .then((data) => {
-      console.log("Data received:", data); // просто перевірка які данні отримали
-      allEvents = data.events; // додаємо до списку
+      console.log("Data received:", data);
+      allEvents = data.events;
       updateMap(allEvents);
       updateSidebar(allEvents);
     })
-    .catch((error) => console.error("Error fetching data:", error)); // якщо є помилка, виводимо в консоль
+    .catch((error) => console.error("Error fetching data:", error));
 
   function updateMap(events) {
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
-        map.removeLayer(layer); // видаляємо всі маркери
+        map.removeLayer(layer);
       }
     });
 
     events.forEach((event) => {
-      // додаємо маркер
       L.marker(event.location).addTo(map).bindPopup(`
         <b>${event.title}</b><br>
         ${event.description}<br>
@@ -36,11 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateSidebar(events) {
     const resultsContainer = document.getElementById("resultsContainer");
-    resultsContainer.innerHTML = ""; // очищуємо результати
+    resultsContainer.innerHTML = "";
 
     events.forEach((event) => {
       const eventElement = document.createElement("div");
-      eventElement.className = "event-item"; // клас для стилізації
+      eventElement.className = "event-item";
 
       eventElement.innerHTML = `
         <h3>${event.title}</h3>
@@ -53,51 +51,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const startYearRange = document.getElementById("startYear");
-  const endYearRange = document.getElementById("endYear");
+  const yearRange = document.getElementById("yearRange");
   const startYearLabel = document.getElementById("startYearLabel");
   const endYearLabel = document.getElementById("endYearLabel");
 
-  // якщо значення шкад змінилося, ми фільтруємо події
-  startYearRange.addEventListener("input", () => {
-    const startYear = parseInt(startYearRange.value);
+  noUiSlider.create(yearRange, {
+    start: [1000, 2024],
+    connect: true,
+    range: {
+      'min': 1000,
+      'max': 2024
+    },
+    step: 1
+  });
+
+  yearRange.noUiSlider.on("update", (values) => {
+    const startYear = Math.round(values[0]);
+    const endYear = Math.round(values[1]);
+
     startYearLabel.textContent = startYear;
-    filterEventsByYear(startYear, parseInt(endYearRange.value));
-  });
-
-  endYearRange.addEventListener("input", () => {
-    const endYear = parseInt(endYearRange.value);
     endYearLabel.textContent = endYear;
-    filterEventsByYear(parseInt(startYearRange.value), endYear);
+    filterEventsByYear(startYear, endYear);
   });
 
-  // обробка за пошуком дати
-  const searchYearInput = document.getElementById("searchYear");
-  const searchButton = document.getElementById("searchButton");
-
-  searchButton.addEventListener("click", () => {
-    const searchYear = parseInt(searchYearInput.value);
-    startYearRange.value = startYearRange.min;
-    endYearRange.value = endYearRange.max;
-    startYearLabel.textContent = startYearRange.value;
-    endYearLabel.textContent = endYearRange.value;
-    filterEventsBySearchYear(searchYear);
-  });
-
-  // фільтр за пошуком
-  function filterEventsBySearchYear(year) {
-    const filteredEvents = allEvents.filter(
-      (event) =>
-        (event.year && parseInt(event.year) === year) ||
-        (event.startYear && event.endYear &&
-          year >= parseInt(event.startYear) &&
-          year <= parseInt(event.endYear))
-    );
-    updateMap(filteredEvents);
-    updateSidebar(filteredEvents); //  оновлення сайд-бара
-  }
-
-  // фільтр для повзунків
   function filterEventsByYear(startYear, endYear) {
     const filteredEvents = allEvents.filter((event) => {
       const eventStartYear = event.startYear ? parseInt(event.startYear) : null;
@@ -110,11 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
     updateMap(filteredEvents);
-    updateSidebar(filteredEvents); //  оновлення сайд-бара
+    updateSidebar(filteredEvents);
   }
 
-  // фільтрації за початковими значеннями
-  filterEventsByYear(parseInt(startYearRange.value), parseInt(endYearRange.value));
+  filterEventsByYear(1000, 2024);
 
   const sidebar = document.getElementById("sidebar");
   const toggleSidebar = document.getElementById("toggleSidebar");
@@ -122,4 +97,17 @@ document.addEventListener("DOMContentLoaded", () => {
   toggleSidebar.addEventListener("click", () => {
     sidebar.classList.toggle("open");
   });
+
+  document.getElementById("searchButton").addEventListener("click", () => {
+    const searchYear = parseInt(document.getElementById("searchYear").value);
+
+    if (!isNaN(searchYear) && searchYear >= 1000 && searchYear <= 2024) {
+      yearRange.noUiSlider.set([searchYear, searchYear]);
+    } else {
+      alert("Please enter a valid year between 1000 and 2024.");
+    }
+
+    document.getElementById("searchYear").value = '';
+});
+
 });

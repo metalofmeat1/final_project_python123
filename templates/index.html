@@ -6,24 +6,20 @@
     <title>Historical Map</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
 </head>
 <body>
     <div id="filters">
         <div id="search">
             <label for="searchYear">Year:</label>
-            <input type="number" id="searchYear" min="1000" max="2024" value="2000">
+            <input type="number" id="searchYear" min="1000" max="2024" value="">
             <button id="searchButton">Search</button>
         </div>
         <div id="timeline">
             <div class="range-container">
-                <label for="startYear">Start:</label>
-                <input type="range" id="startYear" min="1000" max="2024" step="1" value="1000">
-                <span id="startYearLabel">1000</span>
-            </div>
-            <div class="range-container">
-                <label for="endYear">End:</label>
-                <input type="range" id="endYear" min="1000" max="2024" step="1" value="2024">
-                <span id="endYearLabel">2024</span>
+                <label for="yearRange">Years:</label>
+                <div id="yearRange"></div>
+                <span id="startYearLabel">1000</span> - <span id="endYearLabel">2024</span>
             </div>
         </div>
     </div>
@@ -35,6 +31,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

@@ -50,72 +50,64 @@ body {
 
 #timeline {
     background-color: #fdf6e3;
-    padding: 10px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
 .range-container {
     width: 100%;
+    text-align: center;
 }
 
 .range-container label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 16px;
     color: #8a6d3b;
 }
 
-.range-container input[type="range"] {
+.range-container #yearRange {
     width: 100%;
-    margin: 0;
-    background-color: #d1a55c;
-    height: 6px;
-    border-radius: 5px;
-    outline: none;
+    margin: 0 auto;
 }
 
-.range-container input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    background-color: #fff;
-    border: 2px solid #d1a55c;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
+.range-container #yearRange .noUi-connect {
+    background: linear-gradient(to right, #d1a55c, #f5deb3);
 }
 
-.range-container input[type="range"]::-moz-range-thumb {
-    background-color: #fff;
+.range-container #yearRange .noUi-horizontal .noUi-handle {
+    background: #fff;
     border: 2px solid #d1a55c;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
     cursor: pointer;
+    width: 20px;
+    height: 20px;
+    top: -7px;
 }
 
 .range-container span {
-    display: block;
-    margin-top: 5px;
+    display: inline-block;
+    margin-top: 10px;
     font-size: 14px;
     font-weight: 700;
     color: #8a6d3b;
+    width: 80px;
+    text-align: center;
 }
 
 #map {
-    height: 400px; 
+    height: 400px;
     width: 100%;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
 }
-
-
 
 #sidebar {
     position: fixed;
@@ -131,12 +123,15 @@ body {
     padding: 20px;
     z-index: 1000;
 }
+
 #sidebar.open {
     transform: translateX(0);
 }
+
 #sidebar h2 {
     margin-top: 0;
 }
+
 #toggleSidebar {
     position: fixed;
     top: 20px;
