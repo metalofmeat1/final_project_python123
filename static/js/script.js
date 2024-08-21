@@ -30,8 +30,15 @@ function loadEventsForYear(year) {
             });
             allEvents = events;
             events.forEach(event => {
+                var imageUrl = event[6] ? `/uploads/${event[6]}` : '';
                 L.marker([event[4], event[5]]).addTo(map)
-                    .bindPopup(`<b>${event[1]}</b><br>${event[2]}<br>${event[3]}`);
+                    .bindPopup(`
+                        <b>${event[1]}</b><br>
+                        ${event[2]}<br>
+                        ${event[3]}<br>
+                        <img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>
+                        <a href="/event/${event[0]}">Деталі</a>
+                    `);
             });
         });
 }
@@ -50,8 +57,15 @@ function handleSearchFormSubmit(e) {
             });
 
             results.forEach(result => {
+                var imageUrl = result[6] ? `/uploads/${result[6]}` : '';
                 L.marker([result[4], result[5]]).addTo(map)
-                    .bindPopup(`<b>${result[1]}</b><br>${result[2]}<br>${result[3]}`);
+                    .bindPopup(`
+                        <b>${result[1]}</b><br>
+                        ${result[2]}<br>
+                        ${result[3]}<br>
+                        <img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>
+                        <a href="/event/${result[0]}">Деталі</a>
+                    `);
             });
 
             displaySearchResults(results);
@@ -73,6 +87,7 @@ function displaySearchResults(events) {
             <p><strong>Широта:</strong> ${event[4]}</p>
             <p><strong>Довгота:</strong> ${event[5]}</p>
             <p><strong>Категорія:</strong> ${event[6]}</p>
+            <a href="/event/${event[0]}">Деталі</a>
         `;
         eventsList.appendChild(eventElement);
     });
@@ -90,20 +105,25 @@ map.on('click', function(e) {
 });
 
 function addEvent(eventData) {
+    var formData = new FormData(document.getElementById('addEventForm'));
+
     fetch('/api/add_event', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(eventData),
+        body: formData,
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
+            var imageUrl = `/uploads/${formData.get('image').name}`;
             L.marker([eventData.latitude, eventData.longitude]).addTo(map)
-                .bindPopup(`<b>${eventData.name}</b><br>${eventData.description}<br>${eventData.date}`);
+                .bindPopup(`
+                    <b>${eventData.name}</b><br>
+                    ${eventData.description}<br>
+                    ${eventData.date}<br>
+                    <img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>
+                    <a href="/event/${data.event_id}">Деталі</a>
+                `);
             loadEventsForYear(document.getElementById('timeline').value);
-            fetchEvents();
         }
     });
 }
@@ -141,6 +161,7 @@ function fetchEvents() {
                     <p><strong>Широта:</strong> ${event[4]}</p>
                     <p><strong>Довгота:</strong> ${event[5]}</p>
                     <p><strong>Категорія:</strong> ${event[6]}</p>
+                    <a href="/event/${event[0]}">Деталі</a>
                 `;
                 eventsList.appendChild(eventElement);
             });

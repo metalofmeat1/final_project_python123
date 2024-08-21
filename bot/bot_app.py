@@ -102,7 +102,7 @@ def get_average_rating():
 async def send_feedback_request(user_id):
     try:
         await bot.send_message(user_id,
-                               "🌟 Оцініть, будь ласка, якість нашої зворотного зв'язку (від 1 до 5). Напишіть ваш рейтинг.")
+                               "🌟 Оцініть, будь ласка, якість нашої зворотного зв'язку (від 1 до 5). Напишіть /feedback (ваша оцінка).")
     except Exception as e:
         logging.error(f"Error sending feedback request to user_id={user_id}: {e}")
 
@@ -155,15 +155,22 @@ def add_admin(user_id):
     return False
 
 
-def update_request_status(request_id, admin_id):
+async def update_request_status(request_id, admin_id):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     cursor.execute('UPDATE user_requests SET answered_by = ?, status = "answered" WHERE id = ?', (admin_id, request_id))
 
+    # Получаем user_id, чтобы отправить запрос на обратную связь
+    cursor.execute('SELECT user_id FROM user_requests WHERE id = ?', (request_id,))
+    user_id = cursor.fetchone()[0]
+
     conn.commit()
     conn.close()
     logging.info(f"Updated request status: request_id={request_id}, answered_by={admin_id}")
+
+    # Отправляем запрос на обратную связь
+    asyncio.create_task(send_feedback_request(user_id))
 
 
 def get_request_details(request_id):
@@ -212,13 +219,28 @@ async def start_cmd(message: types.Message):
 async def handle_msg_command(message: types.Message):
     admin_ids = read_json(admins_file)
 
-    user_id, user_message = parse_command_args(message.text)
-    if user_id is None or user_message is None:
-        await message.answer("⚙️ Неправильний формат команди. Використовуйте /msg [id] [повідомлення].")
-        logging.warning(f"Invalid command format from user_id={message.from_user.id}")
-        return
+    # Разделяем команду на части
+    command_parts = message.text.split(maxsplit=2)
+
+    # Проверка для админа: он должен ввести 3 части (id, сообщение)
+    if str(message.from_user.id) in admin_ids:
+        if len(command_parts) != 3:
+            await message.answer("⚙️ Неправильний формат команди. Використовуйте /msg [id] [повідомлення].")
+            logging.warning(f"Invalid command format from admin user_id={message.from_user.id}")
+            return
+        user_id = command_parts[1]
+        user_message = command_parts[2]
+    else:
+        # Проверка для обычного пользователя: он должен ввести 2 части (сообщение)
+        if len(command_parts) != 2:
+            await message.answer("⚙️ Неправильний формат команди. Використовуйте /msg [повідомлення].")
+            logging.warning(f"Invalid command format from user_id={message.from_user.id}")
+            return
+        user_id = None  # Адресат будет выбран автоматически
+        user_message = command_parts[1]
 
     if str(message.from_user.id) not in admin_ids:
+        # Логика для обычного пользователя
         request_id = add_user_request(message.from_user.id, user_message)
 
         for admin_id in admin_ids:
@@ -227,22 +249,22 @@ async def handle_msg_command(message: types.Message):
                                        f"Сообщение от пользователя {message.from_user.full_name} (ID: {message.from_user.id}): '{user_message}'")
             except Exception as e:
                 logging.error(f"Error sending message to admin_id={admin_id}: {e}")
-        await message.answer("Ваше сообщение было отправлено администраторам.")
-        # Запрос обратной связи после отправки сообщения
+        await message.answer("Ваше повідомлення було відправлено адміністраторам.")
         await send_feedback_request(message.from_user.id)
     else:
+        # Логика для админа
         request_list = check_request_status(user_id)
         if request_list:
             request_id, status = request_list[0]
             try:
                 await bot.send_message(user_id, f"️Сообщение от админа: '{user_message}'")
                 update_request_status(request_id, message.from_user.id)
-                await message.answer(f"Сообщение отправлено пользователю {user_id}.")
+                await message.answer(f"Повідомлення відправлено користувачу {user_id}.")
             except Exception as e:
                 await message.answer(f"Ошибка при отправке сообщения пользователю {user_id}.")
                 logging.error(f"Error sending admin message to user_id={user_id}: {e}")
         else:
-            await message.answer(f"Запросов от пользователя {user_id} нет или он уже был обработан.")
+            await message.answer(f"Запитів від користувача {user_id} немає, або вони були оброблені адмінами.")
 
 
 @user_private_router.message(Command('requests'))

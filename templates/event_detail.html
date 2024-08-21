@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Деталі події</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>{{ event[1] }}</h1>
+    <p><strong>Опис:</strong> {{ event[2] }}</p>
+    <p><strong>Дата:</strong> {{ event[3] }}</p>
+    <p><strong>Широта:</strong> {{ event[4] }}</p>
+    <p><strong>Довгота:</strong> {{ event[5] }}</p>
+    {% if event[6] %}
+        <img src="{{ url_for('static', filename='uploads/' ~ event[6]) }}" alt="Event Image" style="max-width: 100%; height: auto;">
+    {% endif %}
+    <a href="/">На головну</a>
+</body>
+</html>

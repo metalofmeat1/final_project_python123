@@ -12,6 +12,12 @@ h1, h2 {
     margin-bottom: 20px;
 }
 
+.popup img {
+    width: 100px;
+    height: auto;
+}
+
+
 #map {
     width: 100%;
     height: 600px;

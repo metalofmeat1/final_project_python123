@@ -19,13 +19,12 @@
     </div>
 
     <h2>Додати нову подію</h2>
-    <form id="addEventForm">
+    <form id="addEventForm" enctype="multipart/form-data">
         <label for="name">Назва:</label>
         <input type="text" id="name" name="name" required>
 
         <label for="description">Опис:</label>
         <textarea id="description" name="description" required></textarea>
-
 
         <label for="date">Дата:</label>
         <input type="date" id="date" name="date" required>
@@ -36,8 +35,12 @@
         <label for="longitude">Довгота:</label>
         <input type="text" id="longitude" name="longitude" required>
 
+        <label for="image">Зображення:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+
         <button type="submit">Зберегти подію</button>
     </form>
+
 
     <h2>Список подій</h2>
     <div id="eventsList"></div>
