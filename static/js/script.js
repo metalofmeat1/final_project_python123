@@ -6,15 +6,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let allEvents = [];
 
-  fetch("/api/data")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Data received:", data);
-      allEvents = data.events;
-      updateMap(allEvents);
-      updateSidebar(allEvents);
-    })
-    .catch((error) => console.error("Error fetching data:", error));
+  function fetchEvents(period = null, search = null) {
+    let url = "/api/data";
+    if (period || search) {
+      url += "?";
+      if (period) url += `period=${period}`;
+      if (search) url += `&search=${search}`;
+    }
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Data received:", data);
+        allEvents = data.events;
+        updateMap(allEvents);
+        updateSidebar(allEvents);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }
+
+  fetchEvents();
 
   function updateMap(events) {
     map.eachLayer((layer) => {
@@ -24,11 +35,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     events.forEach((event) => {
-      L.marker(event.location).addTo(map).bindPopup(`
-        <b>${event.title}</b><br>
-        ${event.description}<br>
-        <i>Year: ${event.year || (event.startYear && event.endYear ? event.startYear + '-' + event.endYear : 'Unknown')}</i><br>
-      `);
+      if (event.location && event.location.length === 2) {
+        L.marker(event.location).addTo(map).bindPopup(`
+          <b>${event.title}</b><br>
+          ${event.description}<br>
+          <i>Year: ${event.year || (event.startYear && event.endYear ? event.startYear + '-' + event.endYear : 'Unknown')}</i><br>
+        `);
+      } else {
+        console.error("Invalid location data for event:", event);
+      }
     });
   }
 
@@ -108,6 +123,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.getElementById("searchYear").value = '';
-});
+  });
 
+  const periodSelect = document.getElementById("periodSelect");
+  periodSelect.addEventListener("change", () => {
+    fetchEvents(periodSelect.value);
+  });
+
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("input", () => {
+    fetchEvents(null, searchInput.value);
+  });
 });

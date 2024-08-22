@@ -3,12 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historical Map</title>
+    <title>Historical Events Map</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.css">
 </head>
 <body>
+    <nav class="navbar">
+        <h1>Historical Events Map</h1>
+        <div id="searchEvent">
+            <input type="text" id="searchInput" placeholder="Search by event title...">
+        </div>
+    </nav>
+    <nav class="navbar">
+        <select id="periodSelect">
+            <option value="">All Periods</option>
+            <option value="Січ Запорізька">Січ Запорізька</option>
+            <option value="Україна у складі Речі Посполитої">Україна у складі Речі Посполитої</option>
+            <option value="Сучасна Україна">Сучасна Україна</option>
+        </select>
+    </nav>
     <div id="filters">
         <div id="search">
             <label for="searchYear">Year:</label>

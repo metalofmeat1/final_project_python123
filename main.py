@@ -1,37 +1,53 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import sqlite3
 
 app = Flask(__name__)
 
-def get_events_from_db():
-    conn = sqlite3.connect('events.db')
+def fetch_events(period_id=None, search_term=None):
+    """Fetches historical events from the database with optional filters."""
+    conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
-    cursor.execute('''
-        SELECT id, year, start_year, end_year, location_lat, location_lng, title, description, image, video
-        FROM events
-    ''')
+
+    query = '''
+        SELECT id, period_id, year, start_year, end_year, location_lat, location_lng, title, description, image, video
+        FROM historical_events
+    '''
+    conditions = []
+    params = []
+
+    if period_id:
+        conditions.append("period_id = ?")
+        params.append(period_id)
+
+    if search_term:
+        conditions.append("title LIKE ?")
+        params.append(f"%{search_term}%")
+
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    cursor.execute(query, params)
     rows = cursor.fetchall()
     conn.close()
 
     events = []
     for row in rows:
         event = {
-            "year": row[1] if row[1] is not None else None,
-            "startYear": row[2] if row[2] is not None else None,
-            "endYear": row[3] if row[3] is not None else None,
-            "location": [row[4], row[5]],
-            "title": row[6],
-            "description": row[7],
+            "period_id": row[1],
+            "year": row[2] if row[2] is not None else None,
+            "startYear": row[3] if row[3] is not None else None,
+            "endYear": row[4] if row[4] is not None else None,
+            "location": [row[5], row[6]],
+            "title": row[7],
+            "description": row[8],
             "media": {
-                "image": row[8],
-                "video": row[9]
+                "image": row[9],
+                "video": row[10]
             }
         }
         events.append(event)
 
     return {"events": events}
-
-
 
 @app.route('/')
 def index():
@@ -39,7 +55,9 @@ def index():
 
 @app.route('/api/data')
 def get_data():
-    data = get_events_from_db()
+    period_id = request.args.get('period_id')
+    search_term = request.args.get('search')
+    data = fetch_events(period_id=period_id, search_term=search_term)
     return jsonify(data)
 
 
