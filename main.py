@@ -49,6 +49,18 @@ def fetch_events(period_id=None, search_term=None):
 
     return {"events": events}
 
+def fetch_periods():
+    """Fetches historical periods from the database."""
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT id, name FROM historical_periods')
+    periods = cursor.fetchall()
+
+    conn.close()
+
+    return [{"id": row[0], "name": row[1]} for row in periods]
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -60,6 +72,10 @@ def get_data():
     data = fetch_events(period_id=period_id, search_term=search_term)
     return jsonify(data)
 
+@app.route('/api/periods')
+def get_periods():
+    periods = fetch_periods()
+    return jsonify({"periods": periods})
 
 if __name__ == '__main__':
     app.run(debug=True)

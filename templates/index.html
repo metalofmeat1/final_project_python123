@@ -14,36 +14,26 @@
         <div id="searchEvent">
             <input type="text" id="searchInput" placeholder="Search by event title...">
         </div>
-    </nav>
-    <nav class="navbar">
-        <select id="periodSelect">
-            <option value="">All Periods</option>
-            <option value="Січ Запорізька">Січ Запорізька</option>
-            <option value="Україна у складі Речі Посполитої">Україна у складі Речі Посполитої</option>
-            <option value="Сучасна Україна">Сучасна Україна</option>
-        </select>
-    </nav>
-    <div id="filters">
-        <div id="search">
-            <label for="searchYear">Year:</label>
-            <input type="number" id="searchYear" min="1000" max="2024" value="">
-            <button id="searchButton">Search</button>
+        <div id="periodContainer">
+            <select id="periodSelect">
+                <option value="">All Periods</option>
+            </select>
         </div>
-        <div id="timeline">
-            <div class="range-container">
-                <label for="yearRange">Years:</label>
-                <div id="yearRange"></div>
-                <span id="startYearLabel">1000</span> - <span id="endYearLabel">2024</span>
-            </div>
-        </div>
-    </div>
-    <div id="map"></div>
-    <button id="toggleSidebar">☰</button>
+    </nav>
     <div id="sidebar">
-        <h2>Filtered Results</h2>
         <div id="resultsContainer"></div>
     </div>
-
+    <div id="mapContainer">
+        <button id="toggleSidebar">&#9776;</button>
+        <div id="map"></div>
+        <div id="yearSliderContainer">
+            <label for="yearRange">Year Range: </label>
+            <div id="yearRange"></div>
+            <span id="startYearLabel">1000</span> - <span id="endYearLabel">2024</span>
+            <input type="number" id="searchYear" placeholder="Enter year">
+            <button id="searchButton">Search</button>
+        </div>
+    </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.0/nouislider.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
