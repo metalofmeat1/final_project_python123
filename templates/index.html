@@ -48,11 +48,18 @@
     <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
 
     <div class="search-container">
-        <form id="searchForm">
-            <input type="text" placeholder="Пошук за назвою..." name="query">
+        <form id="searchForm" action="/search" method="GET">
+            <input type="text" placeholder="Пошук..." name="query">
+            <select name="filter">
+                <option value="">Усі</option>
+                <option value="battles">Битви</option>
+                <option value="political_changes">Політичні зміни</option>
+                <option value="discoveries">Відкриття</option>
+            </select>
             <button type="submit">Шукати</button>
         </form>
     </div>
+    
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

@@ -54,6 +54,15 @@ def get_events():
     conn.close()
     return jsonify(events)
 
+@app.route('/api/events/<int:event_id>', methods=['GET'])
+def get_event(event_id):
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
+    event = cursor.fetchone()
+    conn.close()
+    return jsonify(event)
+
 
 @app.route('/api/add_event', methods=['POST'])
 def add_event():
@@ -90,6 +99,27 @@ def search_events():
     conn.close()
 
     return jsonify(events)
+
+
+@app.route('/events')
+def events():
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM events")
+    events = cursor.fetchall()
+    conn.close()
+    return render_template('events.html', events=events)
+
+
+@app.route('/events/<int:event_id>')
+def event_detail(event_id):
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
+    event = cursor.fetchone()
+    conn.close()
+    return render_template('event_details.html', event=event)
+
 
 
 if __name__ == '__main__':
