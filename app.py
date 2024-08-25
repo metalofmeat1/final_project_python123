@@ -21,6 +21,13 @@ def init_db():
                         image TEXT
                       )''')
 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS test_results (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        answer TEXT,
+                        score INTEGER
+                      )''')
+
     conn.commit()
     conn.close()
 
@@ -31,7 +38,7 @@ def index():
 
 
 @app.route('/event/<int:event_id>')
-def event_detail(event_id):
+def event_detail_page(event_id):
     conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
@@ -53,6 +60,7 @@ def get_events():
     events = cursor.fetchall()
     conn.close()
     return jsonify(events)
+
 
 @app.route('/api/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):
@@ -102,7 +110,7 @@ def search_events():
 
 
 @app.route('/events')
-def events():
+def events_page():
     conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM events")
@@ -118,8 +126,48 @@ def event_detail(event_id):
     cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
     event = cursor.fetchone()
     conn.close()
-    return render_template('event_details.html', event=event)
+    return render_template('event_detail.html', event=event)
 
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+
+@app.route('/submit_test', methods=['POST'])
+def submit_test():
+    data = request.json
+    name = data['name']
+    answer = data['answer']
+
+    # Определение баллов на основе ответа
+    score = 0
+    correct_answer = "Правильный ответ"
+    if answer.strip().lower() == correct_answer.lower():
+        score = 10
+
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO test_results (name, answer, score) VALUES (?, ?, ?)",
+        (name, answer, score)
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({'status': 'success'})
+
+
+@app.route('/leaderboard')
+def leaderboard():
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, score FROM test_results ORDER BY score DESC")
+    results = cursor.fetchall()
+    conn.close()
+
+    leaderboard = [{'name': row[0], 'score': row[1]} for row in results]
+    return jsonify(leaderboard)
 
 
 if __name__ == '__main__':

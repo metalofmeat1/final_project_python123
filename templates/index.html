@@ -8,59 +8,68 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-    <h1>Карта історичних подій</h1>
-    <div id="map" style="height: 600px;"></div>
+<h1>Карта історичних подій</h1>
+<div id="map" style="height: 600px;"></div>
 
-    <h2>Виберіть період часу</h2>
-    <div id="timelineContainer">
-        <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024" oninput="updateTimelineLabel(this.value)">
-        <input type="text" id="timelineInput" value="2024" onchange="updateTimelineFromInput()">
-        <span id="timelineLabel">2024</span>
-    </div>
+<h2>Виберіть період часу</h2>
+<div id="timelineContainer">
+    <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024"
+           oninput="updateTimelineLabel(this.value)">
+    <input type="text" id="timelineInput" value="2024" onchange="updateTimelineFromInput()">
+    <span id="timelineLabel">2024</span>
+</div>
 
-    <h2>Додати нову подію</h2>
-    <form id="addEventForm" enctype="multipart/form-data">
-        <label for="name">Назва:</label>
-        <input type="text" id="name" name="name" required>
+<h2>Додати нову подію</h2>
+<form id="addEventForm" enctype="multipart/form-data">
+    <label for="name">Назва:</label>
+    <input type="text" id="name" name="name" required>
 
-        <label for="description">Опис:</label>
-        <textarea id="description" name="description" required></textarea>
+    <label for="description">Опис:</label>
+    <textarea id="description" name="description" required></textarea>
 
-        <label for="date">Дата:</label>
-        <input type="date" id="date" name="date" required>
+    <label for="date">Дата:</label>
+    <input type="date" id="date" name="date" required>
 
-        <label for="latitude">Широта:</label>
-        <input type="text" id="latitude" name="latitude" required>
+    <label for="latitude">Широта:</label>
+    <input type="text" id="latitude" name="latitude" required>
 
-        <label for="longitude">Довгота:</label>
-        <input type="text" id="longitude" name="longitude" required>
+    <label for="longitude">Довгота:</label>
+    <input type="text" id="longitude" name="longitude" required>
 
-        <label for="image">Зображення:</label>
-        <input type="file" id="image" name="image" accept="image/*" required>
+    <label for="image">Зображення:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
 
-        <button type="submit">Зберегти подію</button>
+    <button type="submit">Зберегти подію</button>
+</form>
+
+
+<h2>Список подій</h2>
+<div id="eventsList"></div>
+
+
+<div class="search-container">
+    <form id="searchForm" action="/search" method="GET">
+        <input type="text" placeholder="Пошук..." name="query">
+        <select name="filter">
+            <option value="">Усі</option>
+            <option value="battles">Битви</option>
+            <option value="political_changes">Політичні зміни</option>
+            <option value="discoveries">Відкриття</option>
+        </select>
+        <button type="submit">Шукати</button>
     </form>
+</div>
+
+<footer>
+    <a href="{{ url_for('test') }}" class="btn">Пройти тест</a>
+    <input type="checkbox" class="theme-checkbox">
+
+    <div id="map" style="height: 600px;"></div>
+</footer>
 
 
-    <h2>Список подій</h2>
-    <div id="eventsList"></div>
 
-    <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
 
-    <div class="search-container">
-        <form id="searchForm" action="/search" method="GET">
-            <input type="text" placeholder="Пошук..." name="query">
-            <select name="filter">
-                <option value="">Усі</option>
-                <option value="battles">Битви</option>
-                <option value="political_changes">Політичні зміни</option>
-                <option value="discoveries">Відкриття</option>
-            </select>
-            <button type="submit">Шукати</button>
-        </form>
-    </div>
-    
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
