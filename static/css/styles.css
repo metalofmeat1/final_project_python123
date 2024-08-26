@@ -21,49 +21,9 @@ header h1 {
 
 header .search-container {
     display: flex;
-    align-items: center;
+    align-items: right;
 }
 
-header .search-container .form__group {
-    position: relative;
-    width: 100%;
-    max-width: 200px;
-    margin-top: 15px; /* Збільшений відступ зверху */
-}
-
-header .search-container .form__field {
-    font-family: inherit;
-    width: 100%;
-    border: none;
-    border-bottom: 2px solid #9b9b9b;
-    outline: 0;
-    font-size: 17px;
-    color: #fff;
-    background: transparent;
-    transition: border-color 0.2s;
-}
-
-header .search-container .form__label {
-    position: absolute;
-    top: -15px;
-    left: 0;
-    transition: 0.2s;
-    font-size: 17px;
-    color: #9b9b9b;
-    pointer-events: none;
-}
-
-header .search-container .form__field:focus ~ .form__label {
-    font-size: 12px;
-    top: -25px;
-    color: #e0e0e0;
-}
-
-header .search-container .form__field:focus {
-    border-width: 3px;
-    border-image: linear-gradient(to right, #116399, #38caef);
-    border-image-slice: 1;
-}
 
 header .btn,
 #addEventForm .btn {
@@ -83,14 +43,14 @@ header .btn,
 
 header .btn:hover,
 #addEventForm .btn:hover {
-    border-color: #116399;
-    color: #116399;
+    border-color: #848484;
+    color: #848484;
 }
 
 header .btn:active,
 #addEventForm .btn:active {
-    border-color: #38caef;
-    color: #38caef;
+    border-color: #5a5a5a;
+    color: #5a5a5a;
 }
 
 #map-container, #timeline-container, #add-event-container, #events-list-container {
@@ -143,45 +103,72 @@ header .btn:active,
     margin: 0 auto;
 }
 
-#addEventForm .form__group {
-    margin-bottom: 20px;
+/* From Uiverse.io by mrhyddenn */ 
+.form__group {
     position: relative;
-    margin-top: 7px; /* Опускаємо форму вниз ще на 2 пікселі */
-}
-
-#addEventForm .form__field {
+    padding: 20px 0 0;
+    width: 100%;
+    max-width: 180px;
+  }
+  
+  .form__field {
+    font-family: inherit;
     width: 100%;
     border: none;
     border-bottom: 2px solid #9b9b9b;
-    outline: none;
+    outline: 0;
     font-size: 17px;
     color: #fff;
-    background: transparent;
     padding: 7px 0;
+    background: transparent;
     transition: border-color 0.2s;
-}
-
-#addEventForm .form__label {
+  }
+  
+  .form__field::placeholder {
+    color: transparent;
+  }
+  
+  .form__field:placeholder-shown ~ .form__label {
+    font-size: 17px;
+    cursor: text;
+    top: 20px;
+  }
+  
+  .form__label {
     position: absolute;
-    top: -15px;
-    left: 0;
+    top: 0;
+    display: block;
     transition: 0.2s;
     font-size: 17px;
     color: #9b9b9b;
     pointer-events: none;
-}
-
-#addEventForm .form__field:focus ~ .form__label {
-    font-size: 12px;
-    top: -25px;
-    color: #e0e0e0;
-}
-
-#addEventForm .form__field:focus {
+  }
+  
+  .form__field:focus {
+    padding-bottom: 6px;
+    font-weight: 700;
     border-width: 3px;
-    border-image: linear-gradient(to right, #116399, #38caef);
+    border-image: linear-gradient(to right, #5a5a5a, #848484);
     border-image-slice: 1;
-}
+  }
+  
+  .form__field:focus ~ .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: #848484;
+    font-weight: 700;
+  }
+  
+  /* reset input */
+  .form__field:required, .form__field:invalid {
+    box-shadow: none;
+  }
+/* ////////////////////////////////// */
+
+
 
 #events-list-container div {
     margin-bottom: 20px;

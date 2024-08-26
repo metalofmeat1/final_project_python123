@@ -14,6 +14,7 @@
         <form id="searchForm" class="search-container">
             <div class="form__group">
                 <input class="form__field" type="text" name="query" placeholder="Пошук..."/>
+                <label class="form__label" for="Search">Пошук</label>
             </div>
             <button type="submit" class="btn">Шукати</button>
         </form>
@@ -35,9 +36,11 @@
             <form id="addEventForm" enctype="multipart/form-data">
                 <div class="form__group">
                     <input type="text" class="form__field" id="name" name="name" placeholder="Назва">
+                    <label class="form__label" for="Назва">Назва</label>
                 </div>
                 <div class="form__group">
                     <textarea class="form__field" id="description" name="description" placeholder="Опис"></textarea>
+                    <label class="form__label" for="Опис">Опис</label>
                 </div>
                 <div class="form__group">
                     <input type="date" class="form__field" id="date" name="date" required>
@@ -49,6 +52,7 @@
                 </div>
                 <div class="form__group">
                     <input type="text" class="form__field" id="longitude" name="longitude" placeholder="Довгота" required>
+                    <label class="form__label" for="longitude">Широта</label>
                 </div>
                 <div class="form__group">
                     <input type="file" class="form__field" id="image" name="image" accept="image/*" required>
