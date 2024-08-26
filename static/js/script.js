@@ -78,9 +78,11 @@ function handleSearchFormSubmit(e) {
 
 function displaySearchResults(events) {
     const eventsList = document.getElementById('eventsList');
-    eventsList.innerHTML = '';
+    eventsList.innerHTML = ''; // Clear existing content
+    
     events.forEach(event => {
         const eventElement = document.createElement('div');
+        eventElement.classList.add('card'); // Add 'card' class for styling
         eventElement.innerHTML = `
             <h3>${event.name}</h3>
             <p><strong>Опис:</strong> ${event.description}</p>
@@ -197,5 +199,6 @@ function displayTopResultsOnMap(topResults) {
 document.getElementById("searchForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Запобігаємо стандартній відправці форми
     const cards = document.querySelectorAll('.card');
-    cards.forEach(card => card.classList.add('visible')); // Додаємо клас 'visible' для відображення карток
+    const eventsList = document.getElementById('eventsList');
+    eventsList.classList.add('visible'); // Додаємо клас 'visible' для відображення контейнера карток
 });

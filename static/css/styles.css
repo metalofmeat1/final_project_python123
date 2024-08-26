@@ -164,12 +164,6 @@ header .search-container {
   }
 /* ////////////////////////////////// */
 
-#events-list-container div {
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #111;
-    border-radius: 4px;
-}
 
 footer {
     background-color: #000;
@@ -184,27 +178,32 @@ h2 {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Контейнер для списку подій */
-#events-list-container {
-    display: flex;
-    flex-wrap: wrap; /* Дозволяє карткам переноситися на новий рядок */
-    gap: 10px; /* Відступи між картками */
-    justify-content: flex-start; /* Вирівнювання карток зліва */
-}
 
-/* Стилі для кожної картки */
+
+
+
+
+
+
+/* Стилі для карток */
 .card {
-    display: none; /* Приховує картки за замовчуванням */
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: calc(25% - 20px); /* Фіксована ширина кожної картки, 25% від ширини контейнера */
-    box-sizing: border-box;
+    display: inline-block; /* Дозволяє карткам відображатися в рядок */
+    width: 200px; /* Ширина картки */
+    margin: 10px; /* Відступи між картками */
+    padding: 10px; /* Внутрішні відступи */
+    border: 1px solid #2d2d2d; /* Обведення картки */
+    border-radius: 5px; /* Закруглені кути */
+    background-color: #0e0e0e; /* Фоновий колір картки */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тінь картки */
+    vertical-align: top; /* Вирівнювання карток по вертикалі */
 }
 
-/* Відображення карток при пошуку */
-.card.visible {
-    display: block;
+/* Сховати контейнер результатів */
+#eventsList {
+    display: none; /* Сховати контейнер за замовчуванням */
+}
+
+/* Відображення контейнера з картками, коли форма пошуку відправлена */
+#eventsList.visible {
+    display: block; /* Показати контейнер, коли додано клас 'visible' */
 }
