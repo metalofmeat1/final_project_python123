@@ -28,16 +28,17 @@ function loadEventsForYear(year) {
                     map.removeLayer(layer);
                 }
             });
-            allEvents = events;
+
             events.forEach(event => {
-                var imageUrl = event[6] ? `/uploads/${event[6]}` : '';
-                L.marker([event[4], event[5]]).addTo(map)
+                var imageUrl = event.image ? `${event.image}` : '';
+
+                L.marker([event.latitude, event.longitude]).addTo(map)
                     .bindPopup(`
-                        <b>${event[1]}</b><br>
-                        ${event[2]}<br>
-                        ${event[3]}<br>
-                        <img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>
-                        <a href="/event/${event[0]}">Деталі</a>
+                        <b>${event.name}</b><br>
+                        ${event.description}<br>
+                        ${event.date}<br>
+                        ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>` : ''}
+                        <a href="/event/${event.id}">Деталі</a>
                     `);
             });
         });
@@ -57,14 +58,14 @@ function handleSearchFormSubmit(e) {
             });
 
             results.forEach(result => {
-                var imageUrl = result[6] ? `/uploads/${result[6]}` : '';
-                L.marker([result[4], result[5]]).addTo(map)
+                var imageUrl = result.image ? `/uploads/${result.image}` : '';
+                L.marker([result.latitude, result.longitude]).addTo(map)
                     .bindPopup(`
-                        <b>${result[1]}</b><br>
-                        ${result[2]}<br>
-                        ${result[3]}<br>
-                        <img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>
-                        <a href="/event/${result[0]}">Деталі</a>
+                        <b>${result.name}</b><br>
+                        ${result.description}<br>
+                        ${result.date}<br>
+                        ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>` : ''}
+                        <a href="/event/${result.id}">Деталі</a>
                     `);
             });
 
@@ -81,13 +82,12 @@ function displaySearchResults(events) {
     events.forEach(event => {
         const eventElement = document.createElement('div');
         eventElement.innerHTML = `
-            <h3>${event[1]}</h3>
-            <p><strong>Опис:</strong> ${event[2]}</p>
-            <p><strong>Дата:</strong> ${event[3]}</p>
-            <p><strong>Широта:</strong> ${event[4]}</p>
-            <p><strong>Довгота:</strong> ${event[5]}</p>
-            <p><strong>Категорія:</strong> ${event[6]}</p>
-            <a href="/event/${event[0]}">Деталі</a>
+            <h3>${event.name}</h3>
+            <p><strong>Опис:</strong> ${event.description}</p>
+            <p><strong>Дата:</strong> ${event.date}</p>
+            <p><strong>Широта:</strong> ${event.latitude}</p>
+            <p><strong>Довгота:</strong> ${event.longitude}</p>
+            <a href="/event/${event.id}">Деталі</a>
         `;
         eventsList.appendChild(eventElement);
     });
@@ -120,7 +120,7 @@ function addEvent(eventData) {
                     <b>${eventData.name}</b><br>
                     ${eventData.description}<br>
                     ${eventData.date}<br>
-                    <img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>
+                    ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>` : ''}
                     <a href="/event/${data.event_id}">Деталі</a>
                 `);
             loadEventsForYear(document.getElementById('timeline').value);
@@ -155,13 +155,12 @@ function fetchEvents() {
             events.forEach(event => {
                 const eventElement = document.createElement('div');
                 eventElement.innerHTML = `
-                    <h3>${event[1]}</h3>
-                    <p><strong>Опис:</strong> ${event[2]}</p>
-                    <p><strong>Дата:</strong> ${event[3]}</p>
-                    <p><strong>Широта:</strong> ${event[4]}</p>
-                    <p><strong>Довгота:</strong> ${event[5]}</p>
-                    <p><strong>Категорія:</strong> ${event[6]}</p>
-                    <a href="/event/${event[0]}">Деталі</a>
+                    <h3>${event.name}</h3>
+                    <p><strong>Опис:</strong> ${event.description}</p>
+                    <p><strong>Дата:</strong> ${event.date}</p>
+                    <p><strong>Широта:</strong> ${event.latitude}</p>
+                    <p><strong>Довгота:</strong> ${event.longitude}</p>
+                    <a href="/event/${event.id}">Деталі</a>
                 `;
                 eventsList.appendChild(eventElement);
             });

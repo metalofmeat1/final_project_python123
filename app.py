@@ -1,4 +1,5 @@
-from flask import Flask, render_template, jsonify, request
+import logging
+from flask import Flask, render_template, jsonify, request, send_from_directory
 from werkzeug.utils import secure_filename
 import sqlite3
 import os
@@ -18,7 +19,7 @@ def init_db():
                         date TEXT,
                         latitude REAL,
                         longitude REAL,
-                        image TEXT
+                        image BLOB
                       )''')
 
     conn.commit()
@@ -30,20 +31,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/event/<int:event_id>')
-def event_detail(event_id):
-    conn = sqlite3.connect('history.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
-    event = cursor.fetchone()
-    conn.close()
-
-    if event:
-        return render_template('event_detail.html', event=event)
-    else:
-        return "Event not found", 404
-
-
 @app.route('/api/events', methods=['GET'])
 def get_events():
     year = request.args.get('year')
@@ -52,16 +39,47 @@ def get_events():
     cursor.execute("SELECT * FROM events WHERE date LIKE ?", (f'{year}%',))
     events = cursor.fetchall()
     conn.close()
-    return jsonify(events)
+
+    events_list = []
+
+    for event in events:
+        events_list.append({
+            'id': event[0],
+            'name': event[1],
+            'description': event[2],
+            'date': event[3],
+            'latitude': event[4],
+            'longitude': event[5],
+            'image': f'/uploads/{event[6]}'
+        })
+
+    return jsonify(events_list)
 
 @app.route('/api/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):
-    conn = sqlite3.connect('history.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
-    event = cursor.fetchone()
-    conn.close()
-    return jsonify(event)
+    try:
+        conn = sqlite3.connect('history.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
+        event = cursor.fetchone()
+        conn.close()
+
+        if event:
+            event_data = {
+                'id': event[0],
+                'name': event[1],
+                'description': event[2],
+                'date': event[3],
+                'latitude': event[4],
+                'longitude': event[5],
+                'image': event[6] if event[6] else None
+            }
+            return jsonify(event_data)
+        else:
+            return jsonify({"error": "Event not found"}), 404
+    except Exception as e:
+        logging.error(f'Error fetching event: {e}')
+        return jsonify({"error": "Internal Server Error"}), 500
 
 
 @app.route('/api/add_event', methods=['POST'])
@@ -98,7 +116,19 @@ def search_events():
     events = cursor.fetchall()
     conn.close()
 
-    return jsonify(events)
+    events_list = []
+    for event in events:
+        events_list.append({
+            'id': event[0],
+            'name': event[1],
+            'description': event[2],
+            'date': event[3],
+            'latitude': event[4],
+            'longitude': event[5],
+            'image': event[6]
+        })
+
+    return jsonify(events_list)
 
 
 @app.route('/events')
@@ -111,15 +141,32 @@ def events():
     return render_template('events.html', events=events)
 
 
-@app.route('/events/<int:event_id>')
-def event_detail(event_id):
+@app.route('/event/<int:event_id>')
+def event_page(event_id):
     conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM events WHERE id = ?", (event_id,))
     event = cursor.fetchone()
     conn.close()
-    return render_template('event_details.html', event=event)
 
+    if event:
+        event_data = {
+            'id': event[0],
+            'name': event[1],
+            'description': event[2],
+            'date': event[3],
+            'latitude': event[4],
+            'longitude': event[5],
+            'image': event[6] if event[6] else None
+        }
+        return render_template('event_detail.html', event=event_data)
+    else:
+        return "Event not found", 404
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 if __name__ == '__main__':

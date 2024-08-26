@@ -12,10 +12,10 @@ instance/*
 __pycache__/
 *.py[cod]
 *$py.class
-
+history.db
 # C extensions
 *.so
-
+uploads/
 # Distribution / packaging
 .Python
 build/
