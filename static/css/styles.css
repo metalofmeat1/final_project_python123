@@ -1,207 +1,210 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    font-family: 'Arial', sans-serif;
+    background-color: #000;
+    color: #e0e0e0;
     margin: 0;
     padding: 0;
 }
 
-h1, h2 {
-    color: #4a4a4a;
-    text-align: center;
-    margin-bottom: 20px;
+header {
+    background-color: #000;
+    color: #e0e0e0;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.popup img {
-    width: 100px;
-    height: auto;
+header h1 {
+    margin: 0;
 }
 
+header .search-container {
+    display: flex;
+    align-items: right;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #000;
+    color: #e0e0e0;
+    border: none;
+    border-bottom: 2px solid #e0e0e0;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: border-color 0.3s, color 0.3s;
+    margin-left: 10px;
+    line-height: 1;
+}
+
+.btn:hover {
+    border-color: #848484;
+    color: #848484;
+}
+
+.btn:active {
+    border-color: #5a5a5a;
+    color: #5a5a5a;
+}
+
+#map-container, #timeline-container, #add-event-container, #events-list-container {
+    padding: 20px;
+    margin: 20px 0;
+}
 
 #map {
     width: 100%;
-    height: 600px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
+    height: 500px;
+    border-radius: 4px;
+    background-color: #111;
 }
 
-#map:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#timelineContainer {
-    margin: 20px 0;
-    text-align: center;
+#timeline-container {
+    display: flex;
+    align-items: center;
 }
 
 #timeline {
-    width: 80%;
-    max-width: 500px;
-    margin: 10px 0;
+    flex: 1;
+    margin-right: 10px;
+    background: #555;
+    height: 8px;
+    border-radius: 4px;
+    outline: none;
+}
+
+#timeline::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    background: #e0e0e0;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 #timelineInput {
-    width: 100px;
+    width: 80px;
+    background-color: #000;
+    border: none;
+    color: #e0e0e0;
     text-align: center;
-    margin-left: 10px;
 }
 
-form {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    max-width: 600px;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="date"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
+#addEventForm {
+    background-color: #000;
+    padding: 30px;
     border-radius: 4px;
-    box-sizing: border-box;
-}
-
-textarea {
-    height: 100px;
-    resize: vertical;
-}
-
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-.theme-toggle-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.theme-toggle-btn:hover {
-    background-color: #0056b3;
-}
-
-.search-container {
-    background-color: #333;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-.search-container form {
-    display: flex;
-    max-width: 600px;
+    width: 400px;
     margin: 0 auto;
 }
 
-.search-container input[type="text"] {
-    width: 80%;
-    padding: 10px;
+/* From Uiverse.io by mrhyddenn */ 
+.form__group {
+    position: relative;
+    padding: 20px 0 0;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .form__field {
+    font-family: inherit;
+    width: 100%;
     border: none;
-    border-radius: 4px 0 0 4px;
-    font-size: 16px;
-    outline: none;
+    border-bottom: 2px solid #9b9b9b;
+    outline: 0;
+    font-size: 17px;
+    color: #fff;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+  
+  .form__field::placeholder {
+    color: transparent;
+  }
+  
+  .form__field:placeholder-shown ~ .form__label {
+    font-size: 17px;
+    cursor: text;
+    top: 20px;
+  }
+  
+  .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: #9b9b9b;
+    pointer-events: none;
+  }
+  
+  .form__field:focus {
+    padding-bottom: 6px;
+    font-weight: 700;
+    border-width: 3px;
+    border-image: linear-gradient(to right, #5a5a5a, #848484);
+    border-image-slice: 1;
+  }
+  
+  .form__field:focus ~ .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: #848484;
+    font-weight: 700;
+  }
+  
+  /* reset input */
+  .form__field:required, .form__field:invalid {
+    box-shadow: none;
+  }
+/* ////////////////////////////////// */
+
+#events-list-container div {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #111;
+    border-radius: 4px;
+}
+
+footer {
+    background-color: #000;
+    color: #e0e0e0;
+    padding: 10px;
+    text-align: center;
+}
+
+h2 {
+    font-style: italic;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Контейнер для списку подій */
+#events-list-container {
+    display: flex;
+    flex-wrap: wrap; /* Дозволяє карткам переноситися на новий рядок */
+    gap: 10px; /* Відступи між картками */
+    justify-content: flex-start; /* Вирівнювання карток зліва */
+}
+
+/* Стилі для кожної картки */
+.card {
+    display: none; /* Приховує картки за замовчуванням */
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: calc(25% - 20px); /* Фіксована ширина кожної картки, 25% від ширини контейнера */
     box-sizing: border-box;
 }
 
-.search-container button {
-    padding: 10px 15px;
-    background-color: #ff6f61;
-    color: white;
-    border: none;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.search-container button:hover {
-    background-color: #ff4f41;
-}
-
-        .dark-theme body {
-    background-color: #333;
-    color: #f4f4f4;
-}
-
-.dark-theme h1, .dark-theme h2 {
-    color: #f4f4f4;
-}
-
-.dark-theme #map {
-    border-color: #555;
-}
-
-.dark-theme form {
-    background-color: #444;
-    border-color: #555;
-}
-
-.dark-theme input[type="text"],
-.dark-theme input[type="date"],
-.dark-theme textarea {
-    background-color: #555;
-    color: #f4f4f4;
-    border-color: #666;
-}
-
-.dark-theme button {
-    background-color: #007BFF;
-    color: white;
-}
-
-.dark-theme button:hover {
-    background-color: #0056b3;
-}
-
-.dark-theme .search-container {
-    background-color: #222;
-}
-
-.dark-theme .search-container input[type="text"] {
-    background-color: #444;
-    color: #f4f4f4;
-}
-
-.dark-theme .search-container button {
-    background-color: #ff6f61;
-}
-
-.dark-theme .search-container button:hover {
-    background-color: #ff4f41;
+/* Відображення карток при пошуку */
+.card.visible {
+    display: block;
 }

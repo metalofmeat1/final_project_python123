@@ -2,64 +2,84 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карта історичних подій</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-    <h1>Карта історичних подій</h1>
-    <div id="map" style="height: 600px;"></div>
-
-    <h2>Виберіть період часу</h2>
-    <div id="timelineContainer">
-        <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024" oninput="updateTimelineLabel(this.value)">
-        <input type="text" id="timelineInput" value="2024" onchange="updateTimelineFromInput()">
-        <span id="timelineLabel">2024</span>
-    </div>
-
-    <h2>Додати нову подію</h2>
-    <form id="addEventForm" enctype="multipart/form-data">
-        <label for="name">Назва:</label>
-        <input type="text" id="name" name="name" required>
-
-        <label for="description">Опис:</label>
-        <textarea id="description" name="description" required></textarea>
-
-        <label for="date">Дата:</label>
-        <input type="date" id="date" name="date" required>
-
-        <label for="latitude">Широта:</label>
-        <input type="text" id="latitude" name="latitude" required>
-
-        <label for="longitude">Довгота:</label>
-        <input type="text" id="longitude" name="longitude" required>
-
-        <label for="image">Зображення:</label>
-        <input type="file" id="image" name="image" accept="image/*" required>
-
-        <button type="submit">Зберегти подію</button>
-    </form>
-
-
-    <h2>Список подій</h2>
-    <div id="eventsList"></div>
-
-    <button class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
-
-    <div class="search-container">
-        <form id="searchForm" action="/search" method="GET">
-            <input type="text" placeholder="Пошук..." name="query">
-            <select name="filter">
-                <option value="">Усі</option>
-                <option value="battles">Битви</option>
-                <option value="political_changes">Політичні зміни</option>
-                <option value="discoveries">Відкриття</option>
-            </select>
-            <button type="submit">Шукати</button>
+    <header>
+        <h1>Карта історичних подій</h1>
+        <form id="searchForm" class="search-container">
+            <div class="form__group">
+                <input class="form__field" type="text" name="query" placeholder="Пошук..."/>
+                <label class="form__label" for="Search">Пошук</label>
+            </div>
+            <button type="submit" class="btn">Шукати</button>
         </form>
-    </div>
-    
+    </header>
+    <header>
+        <a>Галерея</a>
+    </header>
+
+    <main>
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+
+        <div id="timeline-container">
+            <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024" oninput="updateTimelineLabel(this.value)">
+            <input type="text" id="timelineInput" value="2024" onchange="updateTimelineFromInput()">
+            <span id="timelineLabel">2024</span>
+        </div>
+
+        
+
+        <div id="events-list-container">
+            <div id="eventsList" class="card"></div>
+        </div>
+
+
+
+
+
+
+        <div id="add-event-container">
+            <h2>Додати нову подію</h2>
+            <form id="addEventForm" enctype="multipart/form-data">
+                <div class="form__group">
+                    <input type="text" class="form__field" id="name" name="name" placeholder="Назва">
+                    <label class="form__label" for="Назва">Назва</label>
+                </div>
+                <div class="form__group">
+                    <textarea class="form__field" id="description" name="description" placeholder="Опис"></textarea>
+                    <label class="form__label" for="Опис">Опис</label>
+                </div>
+                <div class="form__group">
+                    <input type="date" class="form__field" id="date" name="date" required>
+                    <label class="form__label" for="date">Дата</label>
+                </div>
+                <div class="form__group">
+                    <input type="text" class="form__field" id="latitude" name="latitude" required>
+                    <label class="form__label" for="latitude">Широта</label>
+                </div>
+                <div class="form__group">
+                    <input type="text" class="form__field" id="longitude" name="longitude" placeholder="Довгота" required>
+                    <label class="form__label" for="longitude">Довгота</label>
+                </div>
+                <div class="form__group">
+                    <input type="file" class="form__field" id="image" name="image" accept="image/*" required>
+                    <label class="form__label" for="image">Зображення</label>
+                </div>
+                <button type="submit" class="btn">Зберегти подію</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <a href="{{ url_for('test') }}"><button  class="btn">Пройти тест</button></a>
+    </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

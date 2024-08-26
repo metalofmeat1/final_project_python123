@@ -144,6 +144,7 @@ document.getElementById('addEventForm').addEventListener('submit', function(e) {
 document.addEventListener('DOMContentLoaded', function() {
     loadEventsForYear(document.getElementById('timeline').value);
     fetchEvents();
+    fetchTopResults();  // Вызов функции для отображения топ-результатов на карте
 });
 
 function fetchEvents() {
@@ -169,3 +170,32 @@ function fetchEvents() {
             console.error('Помилка:', error);
         });
 }
+
+function fetchTopResults() {
+    // Здесь можно интегрировать запрос к Google Sheets API или другому API для получения топ-результатов
+    var topResults = [
+        { name: "Иван Иванов", score: 95, time: "10:30", latitude: 50.4501, longitude: 30.5234 },
+        { name: "Анна Смирнова", score: 90, time: "12:15", latitude: 50.3511, longitude: 30.6324 },
+        { name: "Петр Петров", score: 85, time: "11:45", latitude: 50.2512, longitude: 30.7235 }
+    ];
+
+    displayTopResultsOnMap(topResults);
+}
+
+function displayTopResultsOnMap(topResults) {
+    topResults.forEach(result => {
+        L.marker([result.latitude, result.longitude]).addTo(map)
+            .bindPopup(` 
+                <b>${result.name}</b><br>
+                Баллы: ${result.score}<br>
+                Время прохождения: ${result.time}<br>
+            `);
+    });
+}
+
+
+document.getElementById("searchForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Запобігаємо стандартній відправці форми
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => card.classList.add('visible')); // Додаємо клас 'visible' для відображення карток
+});
