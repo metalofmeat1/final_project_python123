@@ -13,7 +13,7 @@
         <h1>Карта історичних подій</h1>
         <form id="searchForm" class="search-container">
             <div class="form__group">
-                <input class="form__field" type="text" name="query" placeholder="Пошук..." />
+                <input class="form__field" type="text" name="query"  />
                 <label class="form__label" for="query">Пошук...</label>
             </div>
             <button type="submit" class="btn">Пошук</button>
@@ -21,25 +21,24 @@
     </header>
 
     <main>
-        <section id="map-container">
+        <div id="map-container">
             <div id="map"></div>
-        </section>
+        </div>
 
-        <section id="timeline-container">
-            <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024"
-                   oninput="updateTimelineLabel(this.value)">
+        <div id="timeline-container">
+            <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024" oninput="updateTimelineLabel(this.value)">
             <input type="text" id="timelineInput" value="2024" onchange="updateTimelineFromInput()">
             <span id="timelineLabel">2024</span>
-        </section>
+        </div>
 
-        <section id="add-event-container">
+        <div id="add-event-container">
             <form id="addEventForm" enctype="multipart/form-data">
                 <div class="form__group">
-                    <input type="text" class="form__field" id="name" name="name" placeholder="Назва" required>
+                    <input type="text" class="form__field" id="name" name="name" required>
                     <label class="form__label" for="name">Назва</label>
                 </div>
                 <div class="form__group">
-                    <textarea class="form__field" id="description" name="description" placeholder="Опис" required></textarea>
+                    <textarea class="form__field" id="description" name="description"required></textarea>
                     <label class="form__label" for="description">Опис</label>
                 </div>
                 <div class="form__group">
@@ -47,11 +46,11 @@
                     <label class="form__label" for="date">Дата</label>
                 </div>
                 <div class="form__group">
-                    <input type="text" class="form__field" id="latitude" name="latitude" placeholder="Широта" required>
+                    <input type="text" class="form__field" id="latitude" name="latitude" required>
                     <label class="form__label" for="latitude">Широта</label>
                 </div>
                 <div class="form__group">
-                    <input type="text" class="form__field" id="longitude" name="longitude" placeholder="Довгота" required>
+                    <input type="text" class="form__field" id="longitude" name="longitude" required>
                     <label class="form__label" for="longitude">Довгота</label>
                 </div>
                 <div class="form__group">
@@ -60,11 +59,11 @@
                 </div>
                 <button type="submit" class="btn">Зберегти подію</button>
             </form>
-        </section>
+        </div>
 
-        <section id="events-list-container">
+        <div id="events-list-container">
             <div id="eventsList"></div>
-        </section>
+        </div>
     </main>
 
     <footer>

@@ -26,7 +26,6 @@ header .search-container {
 
 header .search-container .form__group {
     position: relative;
-    padding: 20px 0 0;
     width: 100%;
     max-width: 200px;
 }
@@ -39,70 +38,47 @@ header .search-container .form__field {
     outline: 0;
     font-size: 17px;
     color: #fff;
-    padding: 7px 0;
     background: transparent;
     transition: border-color 0.2s;
-}
-
-header .search-container .form__field::placeholder {
-    color: transparent;
-}
-
-header .search-container .form__field:placeholder-shown ~ .form__label {
-    font-size: 17px;
-    cursor: text;
-    top: 20px;
 }
 
 header .search-container .form__label {
     position: absolute;
     top: 0;
-    display: block;
+    left: 0; /* Вирівнювання по лівому краю */
     transition: 0.2s;
     font-size: 17px;
     color: #9b9b9b;
     pointer-events: none;
 }
 
+header .search-container .form__field:focus ~ .form__label {
+    font-size: 12px;
+    top: -20px;
+    color: #e0e0e0;
+}
+
 header .search-container .form__field:focus {
-    padding-bottom: 6px;
-    font-weight: 700;
     border-width: 3px;
     border-image: linear-gradient(to right, #116399, #38caef);
     border-image-slice: 1;
 }
 
-header .search-container .form__field:focus ~ .form__label {
-    position: absolute;
-    top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: 17px;
-    color: #e0e0e0;
-    font-weight: 700;
-}
-
-header button, .btn {
-    padding: 14px;
-    border: none;
+header .btn {
+    padding: 10px 20px;
     background-color: #000;
     color: #e0e0e0;
-    border-bottom: 2px solid #e0e0e0;
+    border: none;
     cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
 }
 
-header button:hover, .btn:hover {
+header .btn:hover {
     background-color: #222;
 }
 
-main {
+#map-container, #timeline-container, #add-event-container, #events-list-container {
     padding: 20px;
-}
-
-#map-container {
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 #map {
@@ -113,9 +89,6 @@ main {
 }
 
 #timeline-container {
-    margin-bottom: 20px;
-    padding: 10px;
-    border-radius: 4px;
     display: flex;
     align-items: center;
 }
@@ -123,7 +96,6 @@ main {
 #timeline {
     flex: 1;
     margin-right: 10px;
-    -webkit-appearance: none;
     background: #555;
     height: 8px;
     border-radius: 4px;
@@ -131,8 +103,6 @@ main {
 }
 
 #timeline::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
     width: 20px;
     height: 20px;
     background: #e0e0e0;
@@ -142,18 +112,10 @@ main {
 
 #timelineInput {
     width: 80px;
-    text-align: center;
     background-color: #000;
     border: none;
     color: #e0e0e0;
-}
-
-#timelineLabel {
-    margin-left: 10px;
-}
-
-#add-event-container {
-    margin-bottom: 20px;
+    text-align: center;
 }
 
 #addEventForm {
@@ -165,78 +127,61 @@ main {
 }
 
 #addEventForm .form__group {
-    position: relative;
-    padding: 20px 0 0;
-    width: 100%;
+    margin-bottom: 20px;
+    position: relative; /* Додано для коректного позиціонування label */
 }
 
 #addEventForm .form__field {
-    font-family: inherit;
     width: 100%;
     border: none;
     border-bottom: 2px solid #9b9b9b;
-    outline: 0;
+    outline: none;
     font-size: 17px;
     color: #fff;
-    padding: 7px 0;
     background: transparent;
+    padding: 7px 0;
     transition: border-color 0.2s;
-}
-
-#addEventForm .form__field::placeholder {
-    color: transparent;
-}
-
-#addEventForm .form__field:placeholder-shown ~ .form__label {
-    font-size: 17px;
-    cursor: text;
-    top: 20px;
 }
 
 #addEventForm .form__label {
     position: absolute;
     top: 0;
-    display: block;
+    left: 0; /* Вирівнювання по лівому краю */
     transition: 0.2s;
     font-size: 17px;
     color: #9b9b9b;
     pointer-events: none;
 }
 
+#addEventForm .form__field:focus ~ .form__label {
+    font-size: 12px;
+    top: -20px;
+    color: #e0e0e0;
+}
+
 #addEventForm .form__field:focus {
-    padding-bottom: 6px;
-    font-weight: 700;
     border-width: 3px;
     border-image: linear-gradient(to right, #116399, #38caef);
     border-image-slice: 1;
 }
 
-#addEventForm .form__field:focus ~ .form__label {
-    position: absolute;
-    top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: 17px;
-    color: #e0e0e0;
-    font-weight: 700;
-}
-
-#addEventForm button, .btn {
-    padding: 14px;
-    border: none;
+#addEventForm .btn {
+    padding: 10px 20px;
     background-color: #000;
     color: #e0e0e0;
-    border-bottom: 2px solid #e0e0e0;
+    border: none;
     cursor: pointer;
-    text-decoration: none;
 }
 
-#addEventForm button:hover, .btn:hover {
+#addEventForm .btn:hover {
     background-color: #222;
 }
 
-#events-list-container {
-    margin-top: 20px;
+#events-list-container div {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #111;
+    border-radius: 4px;
 }
 
 footer {
@@ -244,10 +189,4 @@ footer {
     color: #e0e0e0;
     padding: 10px;
     text-align: center;
-}
-
-footer .btn {
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 4px;
 }
