@@ -186,10 +186,17 @@ function fetchTopResults() {
 function displayTopResultsOnMap(topResults) {
     topResults.forEach(result => {
         L.marker([result.latitude, result.longitude]).addTo(map)
-            .bindPopup(`
+            .bindPopup(` 
                 <b>${result.name}</b><br>
                 Баллы: ${result.score}<br>
                 Время прохождения: ${result.time}<br>
             `);
     });
 }
+
+
+document.getElementById("searchForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Запобігаємо стандартній відправці форми
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => card.classList.add('visible')); // Додаємо клас 'visible' для відображення карток
+});

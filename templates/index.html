@@ -19,6 +19,9 @@
             <button type="submit" class="btn">Шукати</button>
         </form>
     </header>
+    <header>
+        <a>Галерея</a>
+    </header>
 
     <main>
         <div id="map-container">
@@ -30,6 +33,17 @@
             <input type="text" id="timelineInput" value="2024" onchange="updateTimelineFromInput()">
             <span id="timelineLabel">2024</span>
         </div>
+
+        
+
+        <div id="events-list-container">
+            <div id="eventsList" class="card"></div>
+        </div>
+
+
+
+
+
 
         <div id="add-event-container">
             <h2>Додати нову подію</h2>
@@ -52,7 +66,7 @@
                 </div>
                 <div class="form__group">
                     <input type="text" class="form__field" id="longitude" name="longitude" placeholder="Довгота" required>
-                    <label class="form__label" for="longitude">Широта</label>
+                    <label class="form__label" for="longitude">Довгота</label>
                 </div>
                 <div class="form__group">
                     <input type="file" class="form__field" id="image" name="image" accept="image/*" required>
@@ -61,14 +75,10 @@
                 <button type="submit" class="btn">Зберегти подію</button>
             </form>
         </div>
-
-        <div id="events-list-container">
-            <div id="eventsList"></div>
-        </div>
     </main>
 
     <footer>
-        <a href="{{ url_for('test') }}" class="btn">Пройти тест</a>
+        <a href="{{ url_for('test') }}"><button  class="btn">Пройти тест</button></a>
     </footer>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
