@@ -1,13 +1,13 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #000; /* Чорний фон */
+    background-color: #000;
     color: #e0e0e0;
     margin: 0;
     padding: 0;
 }
 
 header {
-    background-color: #000; /* Чорний фон для header */
+    background-color: #000;
     color: #e0e0e0;
     padding: 20px;
     display: flex;
@@ -28,6 +28,7 @@ header .search-container .form__group {
     position: relative;
     width: 100%;
     max-width: 200px;
+    margin-top: 15px; /* Збільшений відступ зверху */
 }
 
 header .search-container .form__field {
@@ -44,8 +45,8 @@ header .search-container .form__field {
 
 header .search-container .form__label {
     position: absolute;
-    top: 0;
-    left: 0; /* Вирівнювання по лівому краю */
+    top: -15px;
+    left: 0;
     transition: 0.2s;
     font-size: 17px;
     color: #9b9b9b;
@@ -54,7 +55,7 @@ header .search-container .form__label {
 
 header .search-container .form__field:focus ~ .form__label {
     font-size: 12px;
-    top: -20px;
+    top: -25px;
     color: #e0e0e0;
 }
 
@@ -64,16 +65,32 @@ header .search-container .form__field:focus {
     border-image-slice: 1;
 }
 
-header .btn {
+header .btn,
+#addEventForm .btn {
     padding: 10px 20px;
     background-color: #000;
     color: #e0e0e0;
     border: none;
+    border-bottom: 2px solid #e0e0e0;
+    border-radius: 0;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: border-color 0.3s, color 0.3s;
+    margin-left: 10px;
+    line-height: 1;
 }
 
-header .btn:hover {
-    background-color: #222;
+header .btn:hover,
+#addEventForm .btn:hover {
+    border-color: #116399;
+    color: #116399;
+}
+
+header .btn:active,
+#addEventForm .btn:active {
+    border-color: #38caef;
+    color: #38caef;
 }
 
 #map-container, #timeline-container, #add-event-container, #events-list-container {
@@ -83,7 +100,7 @@ header .btn:hover {
 
 #map {
     width: 100%;
-    height: 600px;
+    height: 500px;
     border-radius: 4px;
     background-color: #111;
 }
@@ -128,7 +145,8 @@ header .btn:hover {
 
 #addEventForm .form__group {
     margin-bottom: 20px;
-    position: relative; /* Додано для коректного позиціонування label */
+    position: relative;
+    margin-top: 7px; /* Опускаємо форму вниз ще на 2 пікселі */
 }
 
 #addEventForm .form__field {
@@ -145,8 +163,8 @@ header .btn:hover {
 
 #addEventForm .form__label {
     position: absolute;
-    top: 0;
-    left: 0; /* Вирівнювання по лівому краю */
+    top: -15px;
+    left: 0;
     transition: 0.2s;
     font-size: 17px;
     color: #9b9b9b;
@@ -155,7 +173,7 @@ header .btn:hover {
 
 #addEventForm .form__field:focus ~ .form__label {
     font-size: 12px;
-    top: -20px;
+    top: -25px;
     color: #e0e0e0;
 }
 
@@ -163,18 +181,6 @@ header .btn:hover {
     border-width: 3px;
     border-image: linear-gradient(to right, #116399, #38caef);
     border-image-slice: 1;
-}
-
-#addEventForm .btn {
-    padding: 10px 20px;
-    background-color: #000;
-    color: #e0e0e0;
-    border: none;
-    cursor: pointer;
-}
-
-#addEventForm .btn:hover {
-    background-color: #222;
 }
 
 #events-list-container div {

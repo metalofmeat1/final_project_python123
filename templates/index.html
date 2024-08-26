@@ -13,10 +13,9 @@
         <h1>Карта історичних подій</h1>
         <form id="searchForm" class="search-container">
             <div class="form__group">
-                <input class="form__field" type="text" name="query"  />
-                <label class="form__label" for="query">Пошук...</label>
+                <input class="form__field" type="text" name="query" placeholder="Пошук..."/>
             </div>
-            <button type="submit" class="btn">Пошук</button>
+            <button type="submit" class="btn">Шукати</button>
         </form>
     </header>
 
@@ -32,14 +31,13 @@
         </div>
 
         <div id="add-event-container">
+            <h2>Додати нову подію</h2>
             <form id="addEventForm" enctype="multipart/form-data">
                 <div class="form__group">
-                    <input type="text" class="form__field" id="name" name="name" required>
-                    <label class="form__label" for="name">Назва</label>
+                    <input type="text" class="form__field" id="name" name="name" placeholder="Назва">
                 </div>
                 <div class="form__group">
-                    <textarea class="form__field" id="description" name="description"required></textarea>
-                    <label class="form__label" for="description">Опис</label>
+                    <textarea class="form__field" id="description" name="description" placeholder="Опис"></textarea>
                 </div>
                 <div class="form__group">
                     <input type="date" class="form__field" id="date" name="date" required>
@@ -50,8 +48,7 @@
                     <label class="form__label" for="latitude">Широта</label>
                 </div>
                 <div class="form__group">
-                    <input type="text" class="form__field" id="longitude" name="longitude" required>
-                    <label class="form__label" for="longitude">Довгота</label>
+                    <input type="text" class="form__field" id="longitude" name="longitude" placeholder="Довгота" required>
                 </div>
                 <div class="form__group">
                     <input type="file" class="form__field" id="image" name="image" accept="image/*" required>
