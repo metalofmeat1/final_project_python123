@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, jsonify, request, send_from_directory, redirect, url_for
 from werkzeug.utils import secure_filename
 import sqlite3
 import os
@@ -8,11 +8,9 @@ from db_starter import init_db
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/api/events', methods=['GET'])
 def get_events():
@@ -25,7 +23,6 @@ def get_events():
         conn.close()
 
         events_list = []
-
         for event in events:
             events_list.append({
                 'id': event[0],
@@ -34,14 +31,13 @@ def get_events():
                 'date': event[3],
                 'latitude': event[4],
                 'longitude': event[5],
-                'image': f'/uploads/{event[6]}'
+                'image': f'/uploads/{event[6]}' if event[6] else None
             })
 
         return jsonify(events_list)
     except Exception as e:
         logging.error(f'Error fetching event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
-
 
 @app.route('/api/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):
@@ -69,18 +65,13 @@ def get_event(event_id):
         logging.error(f'Error fetching event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
-
 @app.route('/api/add_event', methods=['POST'])
 def add_event():
     try:
-        # За сенсом коду, нам треба обов'язково додавати картинку у форму, чи воно нам треба? (Якщо не треба, то приберіть)
-        if 'image' not in request.files:
+        if 'image' not in request.files or request.files['image'].filename == '':
             return jsonify({"status": "error", "message": "No image file"}), 400
 
         file = request.files['image']
-        if file.filename == '':
-            return jsonify({"status": "error", "message": "No selected image"}), 400
-
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
@@ -95,9 +86,8 @@ def add_event():
         conn.close()
         return jsonify({"status": "success"}), 201
     except Exception as e:
-        logging.error(f'Error fetching event: {e}')
+        logging.error(f'Error adding event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
-
 
 @app.route('/api/search', methods=['GET'])
 def search_events():
@@ -124,9 +114,8 @@ def search_events():
 
         return jsonify(events_list)
     except Exception as e:
-        logging.error(f'Error fetching event: {e}')
+        logging.error(f'Error searching events: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
-
 
 @app.route('/events')
 def events_page():
@@ -138,9 +127,8 @@ def events_page():
         conn.close()
         return render_template('events.html', events=events)
     except Exception as e:
-        logging.error(f'Error fetching event: {e}')
+        logging.error(f'Error fetching events: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
-
 
 @app.route('/event/<int:event_id>')
 def event_page(event_id):
@@ -168,11 +156,9 @@ def event_page(event_id):
         logging.error(f'Error fetching event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
-
 @app.route('/test')
 def test():
     return render_template('test.html')
-
 
 @app.route('/submit_test', methods=['POST'])
 def submit_test():
@@ -180,9 +166,8 @@ def submit_test():
     name = data['name']
     answer = data['answer']
 
-    # Определение баллов на основе ответа #TODO: Прибрати коментарі 😒😒😒
     score = 0
-    correct_answer = "Правильный ответ"
+    correct_answer = "Правильний відповідь"
     if answer.strip().lower() == correct_answer.lower():
         score = 10
 
@@ -197,11 +182,9 @@ def submit_test():
 
     return jsonify({'status': 'success'})
 
-
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -215,9 +198,116 @@ def leaderboard():
         leaderboard = [{'name': row[0], 'score': row[1]} for row in results]
         return jsonify(leaderboard)
     except Exception as e:
-        logging.error(f'Error fetching event: {e}')
+        logging.error(f'Error fetching leaderboard: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
+    
 
+def get_figures():
+    conn = sqlite3.connect('historical_figures.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT id, name, birth_year, death_year, short_description, remembered_for
+    FROM figures
+    ORDER BY birth_year
+    ''')
+    figures = cursor.fetchall()
+    conn.close()
+    return figures
+
+
+def get_figures():
+    conn = sqlite3.connect('historical_figures.db')
+    cursor = conn.cursor()
+
+    # Оновити запит, щоб відповідати структурі таблиці
+    cursor.execute('''
+    SELECT f.id, f.name, f.birth_year, f.death_year, f.biography, f.notable_for, c.image_filename
+    FROM figures f
+    LEFT JOIN carousel c ON f.id = c.figure_id
+    ''')
+    figures = cursor.fetchall()
+
+    conn.close()
+    return figures
+
+
+# ГАЛЕРЕЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ
+def get_figures():
+    conn = sqlite3.connect('historical_figures.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, name, birth_year, death_year, biography, notable_for, image_filename FROM figures')
+    figures = cursor.fetchall()
+    conn.close()
+    return figures
+
+def get_figure_detail(figure_id):
+    conn = sqlite3.connect('historical_figures.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT f.id, f.name, f.birth_year, f.death_year, f.biography, f.notable_for, f.image_filename, d.detail
+    FROM figures f
+    JOIN figure_detail d ON f.id = d.figure_id
+    WHERE f.id = ?
+    ''', (figure_id,))
+    figure = cursor.fetchone()
+    conn.close()
+    return figure
+
+
+
+def add_figure_to_db(name, birth_year, death_year, biography, notable_for, image_filename, detail):
+    conn = sqlite3.connect('historical_figures.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT INTO figures (name, birth_year, death_year, biography, notable_for, image_filename)
+    VALUES (?, ?, ?, ?, ?, ?)
+    ''', (name, birth_year, death_year, biography, notable_for, image_filename))
+    figure_id = cursor.lastrowid
+    cursor.execute('''
+    INSERT INTO figure_detail (figure_id, detail)
+    VALUES (?, ?)
+    ''', (figure_id, detail))
+    conn.commit()
+    conn.close()
+
+@app.route('/add_figure', methods=['GET', 'POST'])
+def add_figure():
+    if request.method == 'POST':
+        name = request.form['name']
+        birth_year = request.form.get('birth_year')
+        death_year = request.form.get('death_year')
+        biography = request.form.get('biography')
+        notable_for = request.form.get('notable_for')
+        detail = request.form.get('detail')
+        image = request.files['image']
+        image_filename = None
+
+        if image:
+            image_filename = image.filename
+            image_path = os.path.join(app.config['IMAGE_FOLDER'], image_filename)
+            image.save(image_path)
+
+        add_figure_to_db(name, birth_year, death_year, biography, notable_for, image_filename, detail)
+        return redirect(url_for('gallery'))
+
+    return render_template('add_figure.html')
+
+@app.route('/gallery')
+def gallery():
+    figures = get_figures()
+    return render_template('gallery.html', figures=figures)
+
+@app.route('/figure/<int:figure_id>')
+def figure_detail(figure_id):
+    try:
+        figure = get_figure_detail(figure_id)
+        if figure:
+            return render_template('figure_detail.html', figure=figure)
+        else:
+            return "Figure not found", 404
+    except Exception as e:
+        app.logger.error(f'Error fetching figure: {e}')
+        return jsonify({"error": "Internal Server Error"}), 500
 
 if __name__ == '__main__':
     init_db()

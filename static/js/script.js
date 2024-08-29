@@ -75,7 +75,7 @@ function handleSearchFormSubmit(e) {
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">${event.name}</h5>
-                                <p class="card-text">${event.description}<br>${event.date}</p>
+                                <p class="card-text">${event.date}</p>
                                 <a href="/event/${event.id}" class="btn btn-custom">Деталі</a>
                             </div>
                         </div>
