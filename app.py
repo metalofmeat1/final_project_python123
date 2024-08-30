@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify, request, send_from_directory,
 from werkzeug.utils import secure_filename
 import sqlite3
 import os
-from db_starter import init_db
+import subprocess
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -211,35 +211,6 @@ def leaderboard():
     except Exception as e:
         logging.error(f'Error fetching leaderboard: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
-    
-
-def get_figures():
-    conn = sqlite3.connect('historical_figures.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-    SELECT id, name, birth_year, death_year, short_description, remembered_for
-    FROM figures
-    ORDER BY birth_year
-    ''')
-    figures = cursor.fetchall()
-    conn.close()
-    return figures
-
-
-def get_figures():
-    conn = sqlite3.connect('historical_figures.db')
-    cursor = conn.cursor()
-
-    # Оновити запит, щоб відповідати структурі таблиці
-    cursor.execute('''
-    SELECT f.id, f.name, f.birth_year, f.death_year, f.biography, f.notable_for, c.image_filename
-    FROM figures f
-    LEFT JOIN carousel c ON f.id = c.figure_id
-    ''')
-    figures = cursor.fetchall()
-
-    conn.close()
-    return figures
 
 
 # ГАЛЕРЕЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ
@@ -325,7 +296,7 @@ def figure_detail(figure_id):
 
 
 if __name__ == '__main__':
-    init_db()
+    subprocess.run(['python', 'init_db.py'])
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
     app.run(debug=True)

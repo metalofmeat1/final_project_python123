@@ -2,12 +2,8 @@ import sqlite3
 import os
 
 
-def init_db():
+def init_db_historical_figures():
     db_file = 'historical_figures.db'
-
-    # Видалити існуючий файл бази даних
-    if os.path.exists(db_file):
-        os.remove(db_file)
 
     # Створення нової бази даних та таблиць
     conn = sqlite3.connect(db_file)
@@ -50,5 +46,32 @@ def init_db():
     conn.close()
 
 
+def init_db_history():
+    print('OK')
+    conn = sqlite3.connect('history.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS events (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        description TEXT,
+                        date TEXT,
+                        latitude REAL,
+                        longitude REAL,
+                        image BLOB
+                      )''')
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS test_results (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        answer TEXT,
+                        score INTEGER
+                      )''')
+
+    conn.commit()
+    conn.close()
+
+
 if __name__ == '__main__':
-    init_db()
+    init_db_historical_figures()
+    init_db_history()
