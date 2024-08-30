@@ -1,56 +1,60 @@
-/* Темний фон для main */
-body {
-    background-color: #1f1f1f;
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1f1f1f;
+  color: #ffffff; 
 }
 
-body, html {
-    height: 100%;
-    margin:0;
-}
-
+/* Стилі для main */
 main {
-    background-color: #1f1f1f;
-    color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
+  background-color: #1f1f1f; 
+  color: #ffffff; 
+  padding: 20px;
+  border-radius: 8px;
 }
 
 
-/* Інформація про постаті */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff; 
+}
+
+a {
+  color: #ffffff; 
+  text-decoration: none; 
+}
+
+a:hover {
+  color: #dddddd; 
+}
+
+#figures {
+  padding: 20px 0;
+}
+
+#figures .row {
+  margin-bottom: 30px;
+}
+
 #figures img {
-    border: 2px solid #444444;
-}
-
-#figures h2 {
-    color: #ffffff;
+  border: 2px solid #444444; 
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .text-muted {
-    color: #b0b0b0;
+  color: #d7d7d7;
 }
+
 
 footer {
-    background-color: #1f1f1f;
-    color: #ffffff;
+  background-color: #1f1f1f; 
+  color: #ffffff; 
+  text-align: center;
+  padding: 10px 0; 
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }
-
-
-/* Додаткові стилі для секцій */
-section#figures {
-    padding: 20px 0; /* Відступи для секцій */
-}
-
-section#figures .row {
-    margin-bottom: 30px; /* Відступи між постатями */
-}
-
-/* Стилі для карток */
-.img-fluid {
-    max-height: 300px; /* Максимальна висота карток */
-    object-fit: cover; /* Підгонка зображення */
-}
-
-
-
-
-

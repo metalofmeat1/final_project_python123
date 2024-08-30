@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Історичні постаті України</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}" />
 </head>
 
@@ -39,17 +37,18 @@
             <div id="{{ figure[0] }}" class="row mb-5">
                 <div class="col-md-4">
                     {% if figure[6] %}
-                        <img src="{{ url_for('uploaded_file', filename=figure[6]) }}" class="img-fluid rounded-3" alt="{{ figure[1] }}">
+                        <img src="{{ url_for('figure_image', figure_id=figure[0]) }}" class="img-fluid rounded-3" alt="{{ figure[1] }}">
                     {% else %}
                         <img src="{{ url_for('static', filename='images/default.jpg') }}" class="img-fluid rounded-3" alt="{{ figure[1] }}">
                     {% endif %}
                 </div>
                 <div class="col-md-8">
-                    <h2>{{ figure[1] }}</h2>
-                    <p class="text-muted">({{ figure[2] }} - {{ figure[3] }})</p>
+                    <h2 class="header">{{ figure[1] }}</h2>
+                    <p>({{ figure[2] }} - {{ figure[3] }})</p>
                     <p>{{ figure[4] }}</p>
                     <hr>
                     <p><strong>Запам'ятався:</strong> {{ figure[5] }}</p>
+                    <a href="{{ url_for('figure_detail_view', figure_id=figure[0]) }}" class="btn btn-dark">Детальніше</a>
                 </div>
             </div>
             {% endfor %}
