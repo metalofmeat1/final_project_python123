@@ -359,7 +359,6 @@ def figure_detail_view(figure_id):
         else:
             return "Figure not found", 404
     except Exception as e:
-        app.logger.error(f'Error fetching figure: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
     
 
