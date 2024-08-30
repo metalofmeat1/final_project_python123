@@ -1,7 +1,9 @@
-from flask import Flask, render_template, jsonify, request
+# -*- coding: utf-8 -*-
+from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, session
 import sqlite3
-
-app = Flask(__name__)
+import json
+app = Flask(__name__, template_folder='templates')
+app.secret_key = 'your_secret_key'
 
 
 def init_db():
@@ -15,6 +17,31 @@ def init_db():
                         latitude REAL,
                         longitude REAL
                       )''')
+    conn.commit()
+    conn.close()
+
+
+def db():
+    conn = sqlite3.connect('history_guys.db')
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS history_guys (
+                        id INTEGER PRIMARY KEY,
+                        full_name TEXT NOT NULL,
+                        picture TEXT,
+                        bio TEXT
+                      )''')
+    conn.commit()
+    return conn
+
+
+def json_into_db():
+    conn = db()
+    cursor = conn.cursor()
+    with open('history_guys.json', 'r') as json_file:
+        data = json.load(json_file)
+        for guy in data:
+            cursor.execute("INSERT INTO history_guys (full_name, picture, bio) VALUES (?, ?, ?)",
+                           (guy['full_name'], guy['picture'], guy['bio']))
     conn.commit()
     conn.close()
 
@@ -50,6 +77,28 @@ def add_event():
     return jsonify({"status": "success"}), 201
 
 
+@app.route('/historical_man', methods=['GET', 'POST'])
+def historical_man():
+    if request.method == 'POST':
+        guy_id = request.form.get('id')
+        session['data'] = guy_id
+        return redirect(url_for('historical_man_details', guy_id=guy_id))
+    return render_template('historical_man.html')
+
+
+@app.route('/historical_man_details/<int:guy_id>')
+def historical_man_details():
+    guy_id = session['data']
+    conn = db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM history_guys WHERE full_name=?", (guy_id,))
+    guy = cursor.fetchone()
+    conn.close()
+    if guy is not None:
+        return render_template('historical_man_details.html', bio=guy)
+    else:
+        return f"На жаль ми нічого не знаємо про людину на ім'я {guy_id}"
+
+
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)

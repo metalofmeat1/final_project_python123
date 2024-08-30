@@ -188,7 +188,6 @@
 <body>
     <h1>Карта історичних подій</h1>
     <div id="map"></div>
-
     <h2>Виберіть період часу</h2>
     <div id="timelineContainer">
         <input type="range" id="timeline" min="1000" max="2024" step="1" value="2024" oninput="updateTimelineLabel(this.value)">
@@ -229,9 +228,10 @@
                 <option value="political_changes">Політичні зміни</option>
                 <option value="discoveries">Відкриття</option>
             </select>
-            <button type="submit">Шукати</button>
         </form>
     </div>
+    <button class="btn" onclick="window.location.href='{{ url_for('historical_man') }}';">Видалити</button>
+
     <script>
         var map = L.map('map').setView([50.4501, 30.5234], 6);
 
