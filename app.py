@@ -37,14 +37,13 @@ def db():
 def json_into_db():
     conn = db()
     cursor = conn.cursor()
-    with open('history_guys.json', 'r') as json_file:
+    with open('historical_guys.json', 'r') as json_file:
         data = json.load(json_file)
         for guy in data:
             cursor.execute("INSERT INTO history_guys (full_name, picture, bio) VALUES (?, ?, ?)",
                            (guy['full_name'], guy['picture'], guy['bio']))
     conn.commit()
     conn.close()
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -86,7 +85,7 @@ def historical_man():
     return render_template('historical_man.html')
 
 
-@app.route('/historical_man_details/<int:guy_id>')
+@app.route('/historical_man_details/')
 def historical_man_details():
     guy_id = session['data']
     conn = db()
@@ -94,8 +93,14 @@ def historical_man_details():
     cursor.execute("SELECT * FROM history_guys WHERE full_name=?", (guy_id,))
     guy = cursor.fetchone()
     conn.close()
+    guy_info = {
+        "guy_id": guy[0],
+        "full_name": guy[1],
+        "picture": guy[2],
+        "bio": guy[3]
+    }
     if guy is not None:
-        return render_template('historical_man_details.html', bio=guy)
+        return render_template('historical_man_details.html', guy_info=guy_info)
     else:
         return f"На жаль ми нічого не знаємо про людину на ім'я {guy_id}"
 

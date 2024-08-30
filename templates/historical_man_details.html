@@ -5,8 +5,8 @@
     <title>Historical Figure Details</title>
 </head>
 <body>
-    <h1>{{ bio.full_name }}</h1>
-    <img src="{{bio.picture}}">
-    <p>Основна інформація: {{ bio.bio }}</p>
+    <h1>{{ guy_info['full_name'] }}</h1>
+    <img src="{{ guy_info['picture'] }}">
+    <p>Основна інформація: {{ guy_info['bio'] }}</p>
 </body>
 </html>
