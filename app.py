@@ -8,9 +8,11 @@ from db_starter import init_db
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/api/events', methods=['GET'])
 def get_events():
@@ -39,6 +41,7 @@ def get_events():
         logging.error(f'Error fetching event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
+
 @app.route('/api/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):
     try:
@@ -65,6 +68,7 @@ def get_event(event_id):
         logging.error(f'Error fetching event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
+
 @app.route('/api/add_event', methods=['POST'])
 def add_event():
     try:
@@ -88,6 +92,7 @@ def add_event():
     except Exception as e:
         logging.error(f'Error adding event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
+
 
 @app.route('/api/search', methods=['GET'])
 def search_events():
@@ -117,6 +122,7 @@ def search_events():
         logging.error(f'Error searching events: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
+
 @app.route('/events')
 def events_page():
     try:
@@ -129,6 +135,7 @@ def events_page():
     except Exception as e:
         logging.error(f'Error fetching events: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
+
 
 @app.route('/event/<int:event_id>')
 def event_page(event_id):
@@ -156,9 +163,11 @@ def event_page(event_id):
         logging.error(f'Error fetching event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
+
 @app.route('/test')
 def test():
     return render_template('test.html')
+
 
 @app.route('/submit_test', methods=['POST'])
 def submit_test():
@@ -182,9 +191,11 @@ def submit_test():
 
     return jsonify({'status': 'success'})
 
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -240,6 +251,7 @@ def get_figures():
     conn.close()
     return figures
 
+
 def get_figure_detail(figure_id):
     conn = sqlite3.connect('historical_figures.db')
     cursor = conn.cursor()
@@ -252,7 +264,6 @@ def get_figure_detail(figure_id):
     figure = cursor.fetchone()
     conn.close()
     return figure
-
 
 
 def add_figure_to_db(name, birth_year, death_year, biography, notable_for, image_filename, detail):
@@ -270,6 +281,7 @@ def add_figure_to_db(name, birth_year, death_year, biography, notable_for, image
     conn.commit()
     conn.close()
 
+
 @app.route('/add_figure', methods=['GET', 'POST'])
 def add_figure():
     if request.method == 'POST':
@@ -284,7 +296,7 @@ def add_figure():
 
         if image:
             image_filename = image.filename
-            image_path = os.path.join(app.config['IMAGE_FOLDER'], image_filename)
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
             image.save(image_path)
 
         add_figure_to_db(name, birth_year, death_year, biography, notable_for, image_filename, detail)
@@ -292,10 +304,12 @@ def add_figure():
 
     return render_template('add_figure.html')
 
+
 @app.route('/gallery')
 def gallery():
     figures = get_figures()
     return render_template('gallery.html', figures=figures)
+
 
 @app.route('/figure/<int:figure_id>')
 def figure_detail(figure_id):
@@ -308,6 +322,7 @@ def figure_detail(figure_id):
     except Exception as e:
         app.logger.error(f'Error fetching figure: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
+
 
 if __name__ == '__main__':
     init_db()
