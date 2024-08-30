@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify, request, send_from_directory,
 from werkzeug.utils import secure_filename
 import sqlite3
 import os
-from db_starter import init_db
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -327,6 +327,7 @@ def update_figure_in_db(figure_id, name, birth_year, death_year, biography, nota
     conn.commit()
     conn.close()
 
+
 @app.route('/delete_figure/<int:figure_id>', methods=['POST'])
 def delete_figure(figure_id):
     try:
@@ -341,7 +342,9 @@ def delete_figure(figure_id):
 
         return redirect(url_for('gallery'))
     except Exception as e:
+        app.logger.error(f'Error deleting figure: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
+
 
 
 @app.route('/gallery')
@@ -359,6 +362,7 @@ def figure_detail_view(figure_id):
         else:
             return "Figure not found", 404
     except Exception as e:
+        app.logger.error(f'Error fetching figure: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
     
 
