@@ -41,7 +41,7 @@ function handleSearchFormSubmit(e) {
     fetch(`/api/search?query=${encodeURIComponent(query)}`)
         .then(response => response.json())
         .then(events => {
-            console.log('Search results:', events); // Логує результати пошуку для перевірки
+            console.log('Search results:', events); 
 
             displaySearchResults(events);
             addMarkers(events);
@@ -53,11 +53,9 @@ function addMarkers(events) {
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
 
-    // Перевірка та корекція URL зображень
     events.forEach(event => {
         var imageUrl = event.image ? correctImageUrl(event.image) : '';
 
-        // Логування URL для перевірки
         console.log('Image URL:', imageUrl);
 
         var marker = L.marker([event.latitude, event.longitude]).addTo(map)
@@ -72,17 +70,13 @@ function addMarkers(events) {
     });
 }
 
-// Функція для корекції URL зображень
 function correctImageUrl(imageUrl) {
-    // Базовий шлях для зображень
     var baseImageUrl = '/uploads/';
 
-    // Перевірка, чи вже є базовий шлях в URL
     if (imageUrl.startsWith(baseImageUrl)) {
         return imageUrl;
     }
 
-    // Додавання базового шляху, якщо він відсутній
     return baseImageUrl + imageUrl;
 }
 
@@ -90,10 +84,14 @@ function correctImageUrl(imageUrl) {
 function displaySearchResults(events) {
     const eventsList = document.getElementById('eventsList');
     eventsList.innerHTML = '';
+
     events.forEach(event => {
+        const imageUrl = correctImageUrl(event.image); // Отримуємо коректний URL зображення
+
         const eventElement = document.createElement('div');
         eventElement.className = 'card';
         eventElement.innerHTML = `
+            ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" class="card-img-top"><br>` : ''}
             <h3 class="card-title">${event.name}</h3> <!-- Додайте клас заголовка -->
             <p class="card-text"><strong>Дата:</strong> ${event.date}</p> 
             <a href="/event/${event.id}" class="card-text">Деталі</a>
@@ -114,7 +112,6 @@ map.on('click', function(e) {
     document.getElementById('longitude').value = e.latlng.lng;
 });
 
-// Додавання нової події
 function addEvent(eventData) {
     var formData = new FormData(document.getElementById('addEventForm'));
 
@@ -140,7 +137,6 @@ function addEvent(eventData) {
     .catch(error => console.error('Error adding event:', error));
 }
 
-// Обробка відправки форми додавання події
 document.getElementById('addEventForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var eventData = {
@@ -154,14 +150,12 @@ document.getElementById('addEventForm').addEventListener('submit', function(e) {
     addEvent(eventData);
 });
 
-// Завантаження подій при завантаженні сторінки
 document.addEventListener('DOMContentLoaded', function() {
     loadEventsForYear(document.getElementById('timeline').value);
     fetchEvents();
-    fetchTopResults();  // Визов функції для відображення топ-результатів на карті
+    fetchTopResults(); 
 });
 
-// Отримання подій з API
 function fetchEvents() {
     fetch('/api/events')
         .then(response => response.json())
@@ -171,7 +165,6 @@ function fetchEvents() {
         .catch(error => console.error('Error fetching events:', error));
 }
 
-// Отримання топ-результатів
 function fetchTopResults() {
     // Тут можна інтегрувати запит до Google Sheets API або іншого API для отримання топ-результатів
     var topResults = [

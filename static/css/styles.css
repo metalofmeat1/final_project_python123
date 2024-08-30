@@ -76,20 +76,45 @@ footer {
     color: #e0e0e0;
 }
 
-.eventList {
+
+
+
+.eventsList {
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: start;
 }
 
 .card {
     background-color: #2c2c2c;
     border: 1px solid #444;
     color: #e0e0e0;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-right: 2rem;
+    overflow: hidden;
+}
+
+.card-img-top {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
 .card-title {
     color: #f0e6d2;
+    font-size: 1.2em;
+    margin: 0;
 }
 
 .card-text {
     color: #ccc;
+    font-size: 0.9em;
+    margin: 0;
 }
