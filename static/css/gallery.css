@@ -1,0 +1,56 @@
+/* Темний фон для main */
+body {
+    background-color: #1f1f1f;
+}
+
+body, html {
+    height: 100%;
+    margin:0;
+}
+
+main {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+/* Інформація про постаті */
+#figures img {
+    border: 2px solid #444444;
+}
+
+#figures h2 {
+    color: #ffffff;
+}
+
+.text-muted {
+    color: #b0b0b0;
+}
+
+footer {
+    background-color: #1f1f1f;
+    color: #ffffff;
+}
+
+
+/* Додаткові стилі для секцій */
+section#figures {
+    padding: 20px 0; /* Відступи для секцій */
+}
+
+section#figures .row {
+    margin-bottom: 30px; /* Відступи між постатями */
+}
+
+/* Стилі для карток */
+.img-fluid {
+    max-height: 300px; /* Максимальна висота карток */
+    object-fit: cover; /* Підгонка зображення */
+}
+
+
+
+
+
