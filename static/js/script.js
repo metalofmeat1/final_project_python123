@@ -1,42 +1,9 @@
 var map = L.map('map').setView([50.4501, 30.5234], 6);
-var allEvents = [];
 var markers = [];
 
-// Add the OpenStreetMap tile layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map);
-
-function initMap() {
-    fetch('/api/events?year=2024') // Load events for the default year
-        .then(response => response.json())
-        .then(events => {
-            allEvents = events;
-            addMarkers(allEvents);
-        })
-        .catch(error => console.error('Ошибка загрузки подій:', error));
-}
-
-function addMarkers(events) {
-    // Remove existing markers
-    markers.forEach(marker => map.removeLayer(marker));
-    markers = []; // Clear markers array
-
-    events.forEach(event => {
-        var imageUrl = event.image ? `${event.image}` : '';
-
-        var marker = L.marker([event.latitude, event.longitude]).addTo(map)
-            .bindPopup(`
-                <b>${event.name}</b><br>
-                ${event.description}<br>
-                ${event.date}<br>
-                ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>` : ''}
-                <a href="/event/${event.id}">Деталі</a>
-            `);
-
-        markers.push(marker);
-    });
-}
 
 function updateTimelineLabel(year) {
     document.getElementById('timelineLabel').textContent = year;
@@ -56,8 +23,15 @@ function loadEventsForYear(year) {
     fetch(`/api/events?year=${year}`)
         .then(response => response.json())
         .then(events => {
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+
             addMarkers(events);
-        });
+        })
+        .catch(error => console.error('Error loading events:', error));
 }
 
 function handleSearchFormSubmit(e) {
@@ -67,59 +41,152 @@ function handleSearchFormSubmit(e) {
     fetch(`/api/search?query=${encodeURIComponent(query)}`)
         .then(response => response.json())
         .then(events => {
-            document.getElementById('eventsList').innerHTML = '';
+            console.log('Search results:', events); 
 
-            events.forEach(event => {
-                var card = `
-                    <div class="col-12 col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">${event.name}</h5>
-                                <p class="card-text">${event.date}</p>
-                                <a href="/event/${event.id}" class="btn btn-custom">Деталі</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                document.getElementById('eventsList').insertAdjacentHTML('beforeend', card);
-            });
-
-            // Add markers for search results
+            displaySearchResults(events);
             addMarkers(events);
         })
-        .catch(error => console.error('Ошибка поиска:', error));
+        .catch(error => console.error('Error searching events:', error));
 }
 
-function handleAddEventFormSubmit(e) {
-    e.preventDefault();
+function addMarkers(events) {
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+
+    events.forEach(event => {
+        var imageUrl = event.image ? correctImageUrl(event.image) : '';
+
+        console.log('Image URL:', imageUrl);
+
+        var marker = L.marker([event.latitude, event.longitude]).addTo(map)
+            .bindPopup(`
+                <b>${event.name}</b><br>
+                ${event.date}<br>
+                ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>` : ''}
+                <a href="/event/${event.id}">Деталі</a>
+            `);
+
+        markers.push(marker);
+    });
+}
+
+function correctImageUrl(imageUrl) {
+    var baseImageUrl = '/uploads/';
+
+    if (imageUrl.startsWith(baseImageUrl)) {
+        return imageUrl;
+    }
+
+    return baseImageUrl + imageUrl;
+}
+
+
+function displaySearchResults(events) {
+    const eventsList = document.getElementById('eventsList');
+    eventsList.innerHTML = '';
+
+    events.forEach(event => {
+        const imageUrl = correctImageUrl(event.image); // Отримуємо коректний URL зображення
+
+        const eventElement = document.createElement('div');
+        eventElement.className = 'card';
+        eventElement.innerHTML = `
+            ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" class="card-img-top"><br>` : ''}
+            <h3 class="card-title">${event.name}</h3> <!-- Додайте клас заголовка -->
+            <p class="card-text"><strong>Дата:</strong> ${event.date}</p> 
+            <a href="/event/${event.id}" class="card-text">Деталі</a>
+        `;
+        eventsList.appendChild(eventElement);
+    });
+}
+
+
+// Тема для сторінки
+function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+}
+
+// Обробка кліку на карті для отримання координат
+map.on('click', function(e) {
+    document.getElementById('latitude').value = e.latlng.lat;
+    document.getElementById('longitude').value = e.latlng.lng;
+});
+
+function addEvent(eventData) {
     var formData = new FormData(document.getElementById('addEventForm'));
 
-    fetch('/api/events', {
+    fetch('/api/add_event', {
         method: 'POST',
-        body: formData
+        body: formData,
     })
-        .then(response => response.json())
-        .then(event => {
-            alert('Подія додана успішно!');
-            document.getElementById('addEventForm').reset();
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            var imageUrl = `/uploads/${formData.get('image').name}`;
+            L.marker([eventData.latitude, eventData.longitude]).addTo(map)
+                .bindPopup(`
+                    <b>${eventData.name}</b><br>
+                    ${eventData.description}<br>
+                    ${eventData.date}<br>
+                    ${imageUrl ? `<img src="${imageUrl}" alt="Event Image" style="width: 100px; height: auto;"><br>` : ''}
+                    <a href="/event/${data.event_id}">Деталі</a>
+                `);
             loadEventsForYear(document.getElementById('timeline').value);
-        })
-        .catch(error => console.error('Ошибка добавления події:', error));
+        }
+    })
+    .catch(error => console.error('Error adding event:', error));
 }
 
-// Event listeners
+document.getElementById('addEventForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var eventData = {
+        name: document.getElementById('name').value,
+        description: document.getElementById('description').value,
+        date: document.getElementById('date').value,
+        latitude: parseFloat(document.getElementById('latitude').value),
+        longitude: parseFloat(document.getElementById('longitude').value)
+    };
+
+    addEvent(eventData);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadEventsForYear(document.getElementById('timeline').value);
+    fetchEvents();
+    fetchTopResults(); 
+});
+
+function fetchEvents() {
+    fetch('/api/events')
+        .then(response => response.json())
+        .then(events => {
+            displaySearchResults(events);
+        })
+        .catch(error => console.error('Error fetching events:', error));
+}
+
+function fetchTopResults() {
+    // Тут можна інтегрувати запит до Google Sheets API або іншого API для отримання топ-результатів
+    var topResults = [
+        { name: "Иван Иванов", score: 95, time: "10:30", latitude: 50.4501, longitude: 30.5234 },
+        { name: "Анна Смирнова", score: 90, time: "12:15", latitude: 50.3511, longitude: 30.6324 },
+        { name: "Петр Петров", score: 85, time: "11:45", latitude: 50.2512, longitude: 30.7235 }
+    ];
+
+    displayTopResultsOnMap(topResults);
+}
+
+// Відображення топ-результатів на карті
+function displayTopResultsOnMap(topResults) {
+    topResults.forEach(result => {
+        L.marker([result.latitude, result.longitude]).addTo(map)
+            .bindPopup(` 
+                <b>${result.name}</b><br>
+                Балли: ${result.score}<br>
+                Час проходження: ${result.time}<br>
+            `);
+    });
+}
+
+// Обробка відправки форми пошуку
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
-document.getElementById('addEventForm').addEventListener('submit', handleAddEventFormSubmit);
-
-// Timeline slider event
-document.getElementById('timeline').addEventListener('input', function () {
-    updateTimelineLabel(this.value);
-});
-
-document.getElementById('timelineInput').addEventListener('change', updateTimelineFromInput);
-
-// Initialize map on page load
-document.addEventListener('DOMContentLoaded', function () {
-    initMap();
-});

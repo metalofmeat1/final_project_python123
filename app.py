@@ -2,6 +2,7 @@ import functools
 import logging
 from flask import Flask, render_template, jsonify, request, send_from_directory, redirect, url_for, session, flash, \
     abort
+from flask import Flask, render_template, jsonify, request, send_from_directory, redirect, url_for, Response, abort
 from werkzeug.utils import secure_filename
 import sqlite3
 import os
@@ -126,7 +127,6 @@ def change_password():
 
 
 @app.route('/')
-@app.route('/index')
 def index():
     return render_template('index.html')
 
@@ -155,7 +155,7 @@ def get_events():
 
         return jsonify(events_list)
     except Exception as e:
-        logging.error(f'Error fetching events: {e}')
+        logging.error(f'Error fetching event: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
 
@@ -330,10 +330,11 @@ def leaderboard():
         return jsonify({"error": "Internal Server Error"}), 500
 
 
+# ГАЛЕРЕЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ
 def get_figures():
     conn = sqlite3.connect('historical_figures.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT id, name, birth_year, death_year, biography, notable_for, image_filename FROM figures')
+    cursor.execute('SELECT id, name, birth_year, death_year, biography, notable_for, image FROM figures')
     figures = cursor.fetchall()
     conn.close()
     return figures
@@ -343,7 +344,7 @@ def get_figure_detail(figure_id):
     conn = sqlite3.connect('historical_figures.db')
     cursor = conn.cursor()
     cursor.execute('''
-    SELECT f.id, f.name, f.birth_year, f.death_year, f.biography, f.notable_for, f.image_filename, d.detail
+    SELECT f.id, f.name, f.birth_year, f.death_year, f.biography, f.notable_for, f.image, d.detail
     FROM figures f
     JOIN figure_detail d ON f.id = d.figure_id
     WHERE f.id = ?
@@ -353,18 +354,37 @@ def get_figure_detail(figure_id):
     return figure
 
 
-def add_figure_to_db(name, birth_year, death_year, biography, notable_for, image_filename, detail):
+@app.route('/figure_image/<int:figure_id>')
+def figure_image(figure_id):
+    figure = get_figure_detail(figure_id)
+    if figure and figure[6]:
+        return Response(figure[6], mimetype='image/jpeg')
+    else:
+        abort(404)
+
+
+@app.route('/figure_detail/<int:figure_id>')
+def figure_detail(figure_id):
+    figure = get_figure_detail(figure_id)
+    if not figure:
+        abort(404)
+    return render_template('figure_detail.html', figure=figure)
+
+
+def add_figure_to_db(name, birth_year, death_year, biography, notable_for, image, detail):
     conn = sqlite3.connect('historical_figures.db')
     cursor = conn.cursor()
+
     cursor.execute('''
-    INSERT INTO figures (name, birth_year, death_year, biography, notable_for, image_filename)
+    INSERT INTO figures (name, birth_year, death_year, biography, notable_for, image)
     VALUES (?, ?, ?, ?, ?, ?)
-    ''', (name, birth_year, death_year, biography, notable_for, image_filename))
+    ''', (name, birth_year, death_year, biography, notable_for, image))
     figure_id = cursor.lastrowid
     cursor.execute('''
     INSERT INTO figure_detail (figure_id, detail)
     VALUES (?, ?)
     ''', (figure_id, detail))
+
     conn.commit()
     conn.close()
 
@@ -378,18 +398,70 @@ def add_figure():
         biography = request.form.get('biography')
         notable_for = request.form.get('notable_for')
         detail = request.form.get('detail')
-        image = request.files['image']
-        image_filename = None
+        image = request.files['image'].read()
 
-        if image:
-            image_filename = image.filename
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
-            image.save(image_path)
-
-        add_figure_to_db(name, birth_year, death_year, biography, notable_for, image_filename, detail)
+        add_figure_to_db(name, birth_year, death_year, biography, notable_for, image, detail)
         return redirect(url_for('gallery'))
 
     return render_template('add_figure.html')
+
+
+@app.route('/edit_figure/<int:figure_id>', methods=['GET', 'POST'])
+def edit_figure(figure_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        birth_year = request.form.get('birth_year')
+        death_year = request.form.get('death_year')
+        biography = request.form.get('biography')
+        notable_for = request.form.get('notable_for')
+        detail = request.form.get('detail')
+        image = request.files['image'].read() if 'image' in request.files else None
+
+        update_figure_in_db(figure_id, name, birth_year, death_year, biography, notable_for, image, detail)
+        return redirect(url_for('gallery'))
+
+    figure = get_figure_detail(figure_id)
+    if not figure:
+        abort(404)
+    return render_template('edit_figure.html', figure=figure)
+
+
+def update_figure_in_db(figure_id, name, birth_year, death_year, biography, notable_for, image, detail):
+    conn = sqlite3.connect('historical_figures.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+    UPDATE figures
+    SET name = ?, birth_year = ?, death_year = ?, biography = ?, notable_for = ?, image = ?
+    WHERE id = ?
+    ''', (name, birth_year, death_year, biography, notable_for, image, figure_id))
+
+    cursor.execute('''
+    UPDATE figure_detail
+    SET detail = ?
+    WHERE figure_id = ?
+    ''', (detail, figure_id))
+
+    conn.commit()
+    conn.close()
+
+
+@app.route('/delete_figure/<int:figure_id>', methods=['POST'])
+def delete_figure(figure_id):
+    try:
+        conn = sqlite3.connect('historical_figures.db')
+        cursor = conn.cursor()
+
+        cursor.execute('DELETE FROM figure_detail WHERE figure_id = ?', (figure_id,))
+        cursor.execute('DELETE FROM figures WHERE id = ?', (figure_id,))
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('gallery'))
+    except Exception as e:
+        app.logger.error(f'Error deleting figure: {e}')
+        return jsonify({"error": "Internal Server Error"}), 500
 
 
 @app.route('/gallery')
@@ -399,7 +471,7 @@ def gallery():
 
 
 @app.route('/figure/<int:figure_id>')
-def figure_detail(figure_id):
+def figure_detail_view(figure_id):
     try:
         figure = get_figure_detail(figure_id)
         if figure:
