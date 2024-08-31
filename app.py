@@ -5,6 +5,23 @@ import json
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'your_secret_key'
 
+correct_answers = {
+    'q1': 'c',
+    'q2': 'a',
+    'q3': 'c',
+    'q4': 'c',
+    'q5': 'c',
+    'q6': 'd',
+    'q7': 'a',
+    'q8': 'a',
+    'q9': 'b',
+    'q10': 'd',
+    'q11': 'b',
+    'q12': 'b',
+    'q13': 'b',
+    'q14': 'c',
+    'q15': 'a'
+}
 
 def init_db():
     conn = sqlite3.connect('history.db')
@@ -103,6 +120,33 @@ def historical_man_details():
         return render_template('historical_man_details.html', guy_info=guy_info)
     else:
         return f"На жаль ми нічого не знаємо про людину на ім'я {guy_id}"
+
+
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    username = request.form.get('username')
+    score = 0
+    for question, correct_answer in correct_answers.items():
+        user_answer = request.form.get(question)
+        print(user_answer)
+        if user_answer == correct_answer:
+            score += 1
+    session['username'] = username
+    session['score'] = score
+    new = {username: score}
+    users.update(new)
+    return render_template('test.html')
+
+
+users = {}
+
+
+@app.route('/test_leaders', methods=['GET', 'POST'])
+def test_leaders():
+    username = session['username']
+    score = session['score']
+    sorted_users = sorted(users.items(), key=lambda x: x[1], reverse=True)
+    return render_template('test_leaders.html', username=username, score=score, champs=sorted_users)
 
 
 if __name__ == '__main__':
