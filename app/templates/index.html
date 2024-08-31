@@ -27,6 +27,22 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('test') }}">Тести</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('test_leaders') }}">Таблиця лідерів</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('developers') }}">Розробники</a>
+                    </li>
+                    {% if session.get('role') in ['admin', 'super_admin'] %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('add_figure') }}">Додати постать</a>
+                    </li>
+                    {% endif %}
+                    {% if session.get('role') in ['super_admin'] %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">Зареєструвати нового адміна</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -34,7 +50,7 @@
 
     <main class="container my-4">
         <form id="searchForm" class="d-flex justify-content-center mb-3">
-            <input class="form-control me-2" type="search" name="query" placeholder="Пошук..." aria-label="Пошук" required>
+            <input class="form-control me-2" type="search" name="query" placeholder="Пошук..." aria-label="Пошук">
             <button class="btn btn-outline-light" type="submit">Шукати</button>
         </form>
 
@@ -47,6 +63,7 @@
             <input type="text" id="timelineInput" class="form-control me-2" value="2024" onchange="updateTimelineFromInput()">
             <span id="timelineLabel">2024</span>
         </div>
+
 
         <div id="eventsList" class="eventsList">
             <!-- Картки з класом 'card' будуть додані сюди динамічно -->

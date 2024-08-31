@@ -49,7 +49,9 @@
                     <hr>
                     <p><strong>Запам'ятався:</strong> {{ figure[5] }}</p>
                     <a href="{{ url_for('figure_detail_view', figure_id=figure[0]) }}" class="btn btn-dark">Детальніше</a>
+                    {% if session.get('role') in ['admin', 'super_admin'] %}
                     <a href="{{ url_for('edit_figure', figure_id=figure[0]) }}" class="btn btn-secondary ms-2">Редагувати</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

@@ -251,6 +251,11 @@ def test():
     return render_template('test.html')
 
 
+@app.route('/developers')
+def developers():
+    return render_template('gggg.html')
+
+
 @app.route('/test_leaders', methods=['GET'])
 def test_leaders():
     with sqlite3.connect('databases/users.db') as conn:
