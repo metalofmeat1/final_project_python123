@@ -4,7 +4,6 @@ from werkzeug.utils import secure_filename
 import sqlite3
 import os
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
@@ -213,7 +212,6 @@ def leaderboard():
         return jsonify({"error": "Internal Server Error"}), 500
 
 
-
 # ГАЛЕРЕЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ
 def get_figures():
     conn = sqlite3.connect('historical_figures.db')
@@ -236,6 +234,7 @@ def get_figure_detail(figure_id):
     figure = cursor.fetchone()
     conn.close()
     return figure
+
 
 @app.route('/figure_image/<int:figure_id>')
 def figure_image(figure_id):
@@ -308,6 +307,7 @@ def edit_figure(figure_id):
         abort(404)
     return render_template('edit_figure.html', figure=figure)
 
+
 def update_figure_in_db(figure_id, name, birth_year, death_year, biography, notable_for, image, detail):
     conn = sqlite3.connect('historical_figures.db')
     cursor = conn.cursor()
@@ -346,7 +346,6 @@ def delete_figure(figure_id):
         return jsonify({"error": "Internal Server Error"}), 500
 
 
-
 @app.route('/gallery')
 def gallery():
     figures = get_figures()
@@ -364,7 +363,6 @@ def figure_detail_view(figure_id):
     except Exception as e:
         app.logger.error(f'Error fetching figure: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
-    
 
 
 if __name__ == '__main__':

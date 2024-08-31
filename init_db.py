@@ -1,9 +1,9 @@
 import sqlite3
 import os
 
+
 def init_db():
     db_file = 'historical_figures.db'
-
 
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
@@ -31,6 +31,7 @@ def init_db():
 
     conn.commit()
     conn.close()
+
 
 if __name__ == '__main__':
     init_db()
