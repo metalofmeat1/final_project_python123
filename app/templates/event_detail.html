@@ -12,7 +12,7 @@
     {% if event['image'] %}
         <img src="{{ url_for('uploaded_file', filename=event['image']) }}" alt="Event Image">
     {% endif %}
-    <a href="/">На головну</a>
+    <a href="{{ url_for('index') }}">На головну</a>
 </body>
 </html>
 

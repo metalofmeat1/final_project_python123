@@ -71,7 +71,7 @@ function addMarkers(events) {
 }
 
 function correctImageUrl(imageUrl) {
-    var baseImageUrl = '/uploads/';
+    var baseImageUrl = 'app/uploads/';
 
     if (imageUrl.startsWith(baseImageUrl)) {
         return imageUrl;
@@ -122,7 +122,7 @@ function addEvent(eventData) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            var imageUrl = `/uploads/${formData.get('image').name}`;
+            var imageUrl = `app/uploads/${formData.get('image').name}`;
             L.marker([eventData.latitude, eventData.longitude]).addTo(map)
                 .bindPopup(`
                     <b>${eventData.name}</b><br>

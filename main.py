@@ -1,1 +1,4 @@
-print("Hello, PYTHON_1y_21_16_09_23_3")
+from final_project_python123.app.routes import app
+
+if __name__ == '__main__':
+    app.run(debug=True)
