@@ -1,5 +1,7 @@
+import functools
 import logging
-from flask import Flask, render_template, jsonify, request, send_from_directory, redirect, url_for
+from flask import Flask, render_template, jsonify, request, send_from_directory, redirect, url_for, session, flash, \
+    abort
 from werkzeug.utils import secure_filename
 import sqlite3
 import os
@@ -7,9 +9,124 @@ import subprocess
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config["SECRET_KEY"] = "my_key"
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER = 'static/uploads'
+
+
+def role_required(required_role):
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapped_function(*args, **kwargs):
+            user_role = session.get('role')
+            if user_role != required_role:
+                abort(403)
+            return f(*args, **kwargs)
+        return wrapped_function
+    return decorator
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('username', None)
+    session.pop('role', None)
+
+    flash('Ви успішно вийшли з системи.', 'success')
+    return redirect(url_for('login'))
+
+
+def get_db_connection():
+    conn = sqlite3.connect('./database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def get_history_db_connection():
+    conn = sqlite3.connect('history.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+@app.route('/register', methods=['GET', 'POST'])
+@role_required('super_admin')
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+        role = request.form['role']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO admins (email, username, password, role) VALUES (?, ?, ?, ?)",
+                       (email, username, password, role))
+        conn.commit()
+        conn.close()
+
+        flash('You have successfully registered!', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM admins WHERE username = ? AND password = ?",
+                       (username, password))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            session['role'] = user['role']
+            return redirect(url_for('index') + "?success_login=true")
+        else:
+            flash('Incorrect username or password.', 'danger')
+
+    return render_template('login.html')
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+@role_required('admin')
+@role_required('super_admin')
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT password FROM users WHERE id = ?", (session['user_id'],))
+        user = cursor.fetchone()
+
+        if user and user['password'] == current_password:
+            cursor.execute("UPDATE users SET password = ? WHERE id = ?", (new_password, session['user_id']))
+            conn.commit()
+            flash('Password successfully changed!', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('Incorrect current password.', 'danger')
+
+        conn.close()
+
+    return render_template('change_password.html')
 
 
 @app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
 
@@ -38,7 +155,7 @@ def get_events():
 
         return jsonify(events_list)
     except Exception as e:
-        logging.error(f'Error fetching event: {e}')
+        logging.error(f'Error fetching events: {e}')
         return jsonify({"error": "Internal Server Error"}), 500
 
 
@@ -176,7 +293,7 @@ def submit_test():
     answer = data['answer']
 
     score = 0
-    correct_answer = "Правильний відповідь"
+    correct_answer = "Correct answer"
     if answer.strip().lower() == correct_answer.lower():
         score = 10
 
@@ -213,7 +330,6 @@ def leaderboard():
         return jsonify({"error": "Internal Server Error"}), 500
 
 
-# ГАЛЕРЕЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ
 def get_figures():
     conn = sqlite3.connect('historical_figures.db')
     cursor = conn.cursor()

@@ -258,7 +258,7 @@ async def handle_msg_command(message: types.Message):
             request_id, status = request_list[0]
             try:
                 await bot.send_message(user_id, f"️Сообщение от админа: '{user_message}'")
-                update_request_status(request_id, message.from_user.id)
+                await update_request_status(request_id, message.from_user.id)
                 await message.answer(f"Повідомлення відправлено користувачу {user_id}.")
             except Exception as e:
                 await message.answer(f"Ошибка при отправке сообщения пользователю {user_id}.")

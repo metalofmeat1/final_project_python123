@@ -54,36 +54,35 @@
         <div id="eventsList" class="row">
             <!-- Картки з класом 'card' будуть додані сюди динамічно -->
         </div>
-
-        <div id="add-event-container" class="mt-5">
-            <h2 class="text-light">Додати нову подію</h2>
-            <form id="addEventForm" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Назва</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Назва">
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Опис</label>
-                    <textarea class="form-control" id="description" name="description" placeholder="Опис"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="date" class="form-label">Дата</label>
-                    <input type="date" class="form-control" id="date" name="date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="latitude" class="form-label">Широта</label>
-                    <input type="text" class="form-control" id="latitude" name="latitude" required>
-                </div>
-                <div class="mb-3">
-                    <label for="longitude" class="form-label">Довгота</label>
-                    <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Довгота" required>
-                </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Зображення</label>
-                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn btn-outline-light">Зберегти подію</button>
-            </form>
+            <div id="add-event-container" class="mt-5">
+                <h2 class="text-light">Додати нову подію</h2>
+                <form id="addEventForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Назва</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Назва">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Опис</label>
+                        <textarea class="form-control" id="description" name="description" placeholder="Опис"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Дата</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="latitude" class="form-label">Широта</label>
+                        <input type="text" class="form-control" id="latitude" name="latitude" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="longitude" class="form-label">Довгота</label>
+                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Довгота" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Зображення</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-outline-light">Зберегти подію</button>
+                </form>
         </div>
     </main>
 

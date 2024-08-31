@@ -47,7 +47,6 @@ def init_db_historical_figures():
 
 
 def init_db_history():
-    print('OK')
     conn = sqlite3.connect('history.db')
     cursor = conn.cursor()
 
