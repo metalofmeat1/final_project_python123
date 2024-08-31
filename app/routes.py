@@ -5,9 +5,9 @@ from flask import render_template, jsonify, request, redirect, url_for, session,
     send_from_directory
 from werkzeug.utils import secure_filename
 import os
-from app.config import app
-from app.utilities import role_required
-from app.work_with_db import get_db_connection, get_history_db_connection, get_figure_detail, \
+from final_project_python123.app.config import app
+from final_project_python123.app.utilities import role_required
+from final_project_python123.app.work_with_db import get_db_connection, get_history_db_connection, get_figure_detail, \
     get_figures, update_figure_in_db, add_figure_to_db
 
 from final_project_python123.app.config import correct_answers

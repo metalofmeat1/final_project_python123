@@ -105,5 +105,6 @@ if __name__ == '__main__':
     init_historical_figures_db()
     init_admin_db()
     init_super_admin()
+    print("OK")
 
 
