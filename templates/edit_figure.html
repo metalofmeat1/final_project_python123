@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагування постаті</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Головна</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('gallery') }}">Постаті</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('test') }}">Тести</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <h1>Редагування постаті</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="figure_id" value="{{ figure[0] }}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Ім'я</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ figure[1] }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="birth_year" class="form-label">Рік народження</label>
+                <input type="text" id="birth_year" name="birth_year" class="form-control" value="{{ figure[2] }}">
+            </div>
+            <div class="mb-3">
+                <label for="death_year" class="form-label">Рік смерті</label>
+                <input type="text" id="death_year" name="death_year" class="form-control" value="{{ figure[3] }}">
+            </div>
+            <div class="mb-3">
+                <label for="biography" class="form-label">Біографія</label>
+                <textarea id="biography" name="biography" class="form-control" rows="4">{{ figure[4] }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="notable_for" class="form-label">Запам'ятався</label>
+                <input type="text" id="notable_for" name="notable_for" class="form-control" value="{{ figure[5] }}">
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Зображення</label>
+                <input type="file" id="image" name="image" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="detail" class="form-label">Деталі</label>
+                <textarea id="detail" name="detail" class="form-control" rows="4">{{ figure[7] }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+        </form>
+        <form action="{{ url_for('delete_figure', figure_id=figure[0]) }}" method="post" onsubmit="return confirm('Ви впевнені, що хочете видалити цю постать?');">
+            <button type="submit" class="btn btn-danger">Видалити</button>
+        </form>
+    </main>
+
+    <footer class="bg-dark text-center text-white py-3">
+        <div class="container">
+            <p>© 2024 Історичні постаті України</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

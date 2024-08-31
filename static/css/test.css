@@ -1,0 +1,136 @@
+body {
+    font-family: 'Georgia', serif;
+    background-color: #1a1a1a;
+    color: #f8f0e3;
+    text-align: center;
+    padding: 30px;
+    margin: 0;
+}
+
+h1 {
+    font-size: 32px;
+    color: #f8f0e3;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 18px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type="text"] {
+    width: 60%;
+    padding: 8px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #444;
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #f8f0e3;
+    background-color: #444;
+    transform: scale(1.02);
+}
+
+button {
+    font-family: 'Times New Roman', serif;
+    font-size: 20px;
+    color: #f8f0e3;
+    background-color: #444;
+    padding: 12px 24px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #595959;
+    transform: scale(1.05);
+}
+
+#leaderboard {
+    max-width: 70%;
+    margin: 20px auto;
+    border: 1px solid #444;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #f8f0e3;
+}
+
+#leaderboard h2 {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #f8f0e3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #ffffff;
+    table-layout: fixed;
+}
+
+thead th {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px solid #555;
+    background-color: #1f1f1f;
+    color: #f8f0e3;
+    vertical-align: middle;
+}
+
+tbody td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #555;
+    vertical-align: middle;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #2a2a2a;
+}
+
+tbody tr:hover {
+    background-color: #444;
+}
+
+table th, table td {
+    border-right: 1px solid #555;
+}
+
+table th:last-child, table td:last-child {
+    border-right: none;
+}
+
+table th, table td {
+    position: relative;
+}
+
+table th::after, table td::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -1px;
+    width: 1px;
+    background-color: #555;
+}
