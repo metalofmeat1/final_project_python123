@@ -10,6 +10,9 @@ from app.utilities import role_required
 from app.work_with_db import get_db_connection, get_history_db_connection, get_figure_detail, \
     get_figures, update_figure_in_db, add_figure_to_db
 
+from final_project_python123.app.config import correct_answers
+from final_project_python123.app.work_with_db import insert_to_db
+
 
 @app.route('/')
 def index():
@@ -71,8 +74,7 @@ def register():
 
 
 @app.route('/change_password', methods=['GET', 'POST'])
-@role_required('admin')
-@role_required('super_admin')
+@role_required('admin', 'super_admin')
 def change_password():
     if request.method == 'POST':
         current_password = request.form['current_password']
@@ -203,6 +205,7 @@ def add_event():
         logging.error(f'Error adding event: {e}')
         return jsonify({"status": "error", "message": "Internal Server Error"}), 500
 
+
 @app.route('/api/search', methods=['GET'])
 def search_events():
     try:
@@ -234,10 +237,27 @@ def search_events():
         return jsonify({"error": "Internal Server Error"}), 500
 
 
-
-@app.route('/test')
+@app.route('/test', methods=['GET', 'POST'])
 def test():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        score = 0
+        for question, correct_answer in correct_answers.items():
+            user_answer = request.form.get(question)
+            if user_answer == correct_answer:
+                score += 1
+        insert_to_db(username, score)
+        return redirect(url_for('test_leaders'))
     return render_template('test.html')
+
+
+@app.route('/test_leaders', methods=['GET'])
+def test_leaders():
+    with sqlite3.connect('databases/users.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM leaders")
+        champs = cursor.fetchall()
+    return render_template('test_leaders.html', champs=champs)
 
 
 @app.route('/figure_image/<int:figure_id>')
@@ -255,6 +275,7 @@ def uploaded_file(filename):
 
 
 @app.route('/edit_figure/<int:figure_id>', methods=['GET', 'POST'])
+@role_required('admin', 'super_admin')
 def edit_figure(figure_id):
     if request.method == 'POST':
         name = request.form['name']
@@ -275,6 +296,7 @@ def edit_figure(figure_id):
 
 
 @app.route('/delete_figure/<int:figure_id>', methods=['POST'])
+@role_required('admin', 'super_admin')
 def delete_figure(figure_id):
     try:
         conn = sqlite3.connect('databases/historical_figures.db')
@@ -293,6 +315,7 @@ def delete_figure(figure_id):
 
 
 @app.route('/add_figure', methods=['GET', 'POST'])
+@role_required('admin', 'super_admin')
 def add_figure():
     if request.method == 'POST':
         name = request.form['name']

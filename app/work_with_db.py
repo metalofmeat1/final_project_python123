@@ -72,3 +72,11 @@ def update_figure_in_db(figure_id, name, birth_year, death_year, biography, nota
 
     conn.commit()
     conn.close()
+
+
+def insert_to_db(username, score):
+    connection = sqlite3.connect('databases/users.db')
+    cursor = connection.cursor()
+    cursor.execute(''' INSERT INTO leaders (name, result) VALUES(?, ?) ''', (username, score))
+    connection.commit()
+    connection.close()

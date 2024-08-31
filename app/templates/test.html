@@ -3,76 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест з історії</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
+    <title>Тест: Історія України</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/test_for.css') }}" />
 </head>
 <body>
-    <h1>Пройдіть тест</h1>
-    <form id="testForm">
-        <label for="name">Введіть Ваше ім'я:</label>
-        <input type="text" id="name" name="name" required>
-        <br><br>
-        <label for="answer">Ваша відповідь:</label>
-        <input type="text" id="answer" name="answer" required>
-        <br><br>
-        <button type="submit">Відправити</button>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Головна</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('gallery') }}">Постаті</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('test') }}">Тести</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h1>Тест</h1>
+    <form id="quizForm" method="POST">
+        <label for="username"></label>
+    <input type="text" id="username" name='username' placeholder="Введіть своє ім'я">
+        <div class="question">
+            <p>1. Хто був першим князем Київської Русі?</p>
+            <label><input type="radio" name="q1" value="a"> Святослав Ігорович</label>
+            <label><input type="radio" name="q1" value="b"> Ярослав Мудрий</label>
+            <label><input type="radio" name="q1" value="c"> Олег Віщий</label>
+            <label><input type="radio" name="q1" value="d"> Володимир Великий</label>
+        </div>
+
+        <div class="question">
+            <p>2. В якому році була прийнята Конституція Пилипа Орлика?</p>
+            <label><input type="radio" name="q2" value="a"> 1710</label>
+            <label><input type="radio" name="q2" value="b"> 1648</label>
+            <label><input type="radio" name="q2" value="c"> 1805</label>
+            <label><input type="radio" name="q2" value="d"> 1918</label>
+        </div>
+
+        <div class="question">
+            <p>3. Яке місто стало столицею Галицько-Волинського князівства?</p>
+            <label><input type="radio" name="q3" value="a"> Львів</label>
+            <label><input type="radio" name="q3" value="b"> Київ</label>
+            <label><input type="radio" name="q3" value="c"> Галич</label>
+            <label><input type="radio" name="q3" value="d"> Чернігів</label>
+        </div>
+
+        <div class="question">
+            <p>4. Хто був першим президентом України?</p>
+            <label><input type="radio" name="q4" value="a"> Леонід Кучма</label>
+            <label><input type="radio" name="q4" value="b"> Віктор Ющенко</label>
+            <label><input type="radio" name="q4" value="c"> Леонід Кравчук</label>
+            <label><input type="radio" name="q4" value="d"> Петро Порошенко</label>
+        </div>
+
+        <div class="question">
+            <p>5. Коли відбулася битва під Берестечком?</p>
+            <label><input type="radio" name="q5" value="a"> 1605</label>
+            <label><input type="radio" name="q5" value="b"> 1649</label>
+            <label><input type="radio" name="q5" value="c"> 1651</label>
+            <label><input type="radio" name="q5" value="d"> 1676</label>
+        </div>
+
+        <div class="question">
+            <p>6. Яка подія ознаменувала початок козацько-селянських повстань у XVI столітті?</p>
+            <label><input type="radio" name="q6" value="a"> Битва під Жовтими Водами</label>
+            <label><input type="radio" name="q6" value="b"> Битва під Корсунем</label>
+            <label><input type="radio" name="q6" value="c"> Повстання Костянтина Острозького</label>
+            <label><input type="radio" name="q6" value="d"> Повстання Наливайка</label>
+        </div>
+
+        <div class="question">
+            <p>7. У якому році відбулася Хмельниччина?</p>
+            <label><input type="radio" name="q7" value="a"> 1648</label>
+            <label><input type="radio" name="q7" value="b"> 1654</label>
+            <label><input type="radio" name="q7" value="c"> 1687</label>
+            <label><input type="radio" name="q7" value="d"> 1709</label>
+        </div>
+
+        <div class="question">
+            <p>8. Хто був гетьманом України під час Північної війни?</p>
+            <label><input type="radio" name="q8" value="a"> Іван Мазепа</label>
+            <label><input type="radio" name="q8" value="b"> Богдан Хмельницький</label>
+            <label><input type="radio" name="q8" value="c"> Петро Сагайдачний</label>
+            <label><input type="radio" name="q8" value="d"> Павло Скоропадський</label>
+        </div>
+
+        <div class="question">
+            <p>9. Що таке "Руїна" в українській історії?</p>
+            <label><input type="radio" name="q9" value="a"> Голодомор</label>
+            <label><input type="radio" name="q9" value="b"> Період роздробленості та внутрішніх конфліктів</label>
+            <label><input type="radio" name="q9" value="c"> Проголошення незалежності</label>
+            <label><input type="radio" name="q9" value="d"> Битва під Полтавою</label>
+        </div>
+
+        <div class="question">
+            <p>10. Хто був останнім гетьманом Запорізької Січі?</p>
+            <label><input type="radio" name="q10" value="a"> Петро Дорошенко</label>
+            <label><input type="radio" name="q10" value="b"> Іван Виговський</label>
+            <label><input type="radio" name="q10" value="c"> Костянтин Острозький</label>
+            <label><input type="radio" name="q10" value="d"> Петро Калнишевський</label>
+        </div>
+
+        <div class="question">
+            <p>11. Коли було проголошено Акт Злуки УНР і ЗУНР?</p>
+            <label><input type="radio" name="q11" value="a"> 1918</label>
+            <label><input type="radio" name="q11" value="b"> 1919</label>
+            <label><input type="radio" name="q11" value="c"> 1921</label>
+            <label><input type="radio" name="q11" value="d"> 1922</label>
+        </div>
+
+        <div class="question">
+            <p>12. Хто очолював ОУН під час Другої світової війни?</p>
+            <label><input type="radio" name="q12" value="a"> Роман Шухевич</label>
+            <label><input type="radio" name="q12" value="b"> Степан Бандера</label>
+            <label><input type="radio" name="q12" value="c"> Євген Коновалець</label>
+            <label><input type="radio" name="q12" value="d"> Андрій Мельник</label>
+        </div>
+
+        <div class="question">
+            <p>13. Яке місто було столицею Української РСР до 1934 року?</p>
+            <label><input type="radio" name="q13" value="a"> Київ</label>
+            <label><input type="radio" name="q13" value="b"> Харків</label>
+            <label><input type="radio" name="q13" value="c"> Одеса</label>
+            <label><input type="radio" name="q13" value="d"> Львів</label>
+        </div>
+
+        <div class="question">
+            <p>14. Коли була проголошена незалежність України?</p>
+            <label><input type="radio" name="q14" value="a"> 1989</label>
+            <label><input type="radio" name="q14" value="b"> 1990</label>
+            <label><input type="radio" name="q14" value="c"> 1991</label>
+            <label><input type="radio" name="q14" value="d"> 1992</label>
+        </div>
+
+        <div class="question">
+            <p>15. Як називалася угода, що ознаменувала кінець війни між Річчю Посполитою та Московським царством за Україну?</p>
+            <label><input type="radio" name="q15" value="a"> Андрусівське перемир'я</label>
+            <label><input type="radio" name="q15" value="b"> Брестський мир</label>
+            <label><input type="radio" name="q15" value="c"> Переяславська угода</label>
+            <label><input type="radio" name="q15" value="d"> Люблінська унія</label>
+        </div>
+
+        <button type="submit" class="submit-button">Перевірити відповіді</button>
     </form>
-
-    <div id="leaderboard">
-        <h2>Таблиця лідерів</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Ім'я</th>
-                    <th>Бал</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        document.getElementById('testForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const answer = document.getElementById('answer').value;
-
-            fetch('/submit_test', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, answer: answer })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('Ваш результат збережено!');
-                    loadLeaderboard();
-                } else {
-                    alert('Сталася помилка під час збереження результату.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Сталася помилка під час збереження результату.');
-            });
-        });
-
-        function loadLeaderboard() {
-            fetch('/leaderboard')
-                .then(response => response.json())
-                .then(leaderboard => {
-                    const tbody = document.querySelector('#leaderboard tbody');
-                    tbody.innerHTML = '';
-                    leaderboard.forEach(entry => {
-                        tbody.innerHTML += `<tr><td>${entry.name}</td><td>${entry.score || '-'}</td></tr>`;
-                    });
-                });
-        }
-
-        window.onload = loadLeaderboard;
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 </html>

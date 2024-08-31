@@ -84,11 +84,26 @@ def init_history_db():
 
     conn.commit()
     conn.close()
+    print('База даних history.db створена.')
+
+
+def init_score():
+    conn = sqlite3.connect('databases/users.db')
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS leaders (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        result INTEGER NOT NULL
+                      )''')
+    conn.commit()
+    conn.close()
 
 
 if __name__ == '__main__':
+    init_score()
     init_history_db()
     init_historical_figures_db()
     init_admin_db()
     init_super_admin()
+
 
