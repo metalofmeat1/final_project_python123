@@ -4,59 +4,82 @@
 
 {% block content %}
 <style>
-    h2 {
-        color: #6f5b44;
-        font-size: 1.8em;
-        font-weight: bold;
+    body {
+        font-family: 'Georgia', serif;
+        background-color: #1a1a1a;
+        color: #f8f0e3;
         text-align: center;
-        margin-bottom: 20px;
+        padding: 30px;
+        margin: 0;
+    }
+
+    h2 {
+        font-size: 32px;
+        color: #f8f0e3;
+        margin-top: 20px;
+        margin-bottom: 15px;
     }
 
     form {
-        background-color: #ffffff;
+        background-color: #2c2c2c;
         padding: 20px;
-        border-radius: 0;
+        border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         max-width: 400px;
         margin: 0 auto;
-        border: 2px solid #c2a78f;
+        border: 1px solid #444;
         text-align: center;
     }
 
     label {
+        font-size: 18px;
+        color: #ffffff;
         display: block;
         margin-bottom: 10px;
-        font-weight: bold;
-        color: #3e3a39;
         text-align: left;
+        width: 100%;
     }
 
     input[type="email"],
     input[type="text"],
     input[type="password"],
-    select{
+    select {
         width: 100%;
         padding: 10px;
         margin-bottom: 20px;
-        border: 1px solid #c2a78f;
-        border-radius: 0;
-        background-color: #f9f9f9;
-        color: #3e3a39;
+        font-size: 16px;
+        border: 1px solid #444;
+        background-color: #2c2c2c;
+        color: #ffffff;
+        border-radius: 5px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    input[type="email"]:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+        border-color: #f8f0e3;
+        background-color: #444;
+        transform: scale(1.02);
     }
 
     button {
-        width: 100%;
-        padding: 10px;
-        background-color: #4e3a2a;
-        color: #e2dbc6;
-        border: 2px solid #c2a78f;
-        border-radius: 0;
+        font-family: 'Georgia', serif;
+        font-size: 20px;
+        color: #f8f0e3;
+        background-color: #444;
+        padding: 12px 24px;
+        border-radius: 5px;
+        border: none;
         cursor: pointer;
-        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     button:hover {
-        background-color: #3a2d22;
+        background-color: #595959;
+        transform: scale(1.05);
     }
 
     p {
@@ -65,7 +88,7 @@
     }
 
     a {
-        color: #6f5b44;
+        color: #f8f0e3;
         text-decoration: none;
         font-weight: bold;
     }

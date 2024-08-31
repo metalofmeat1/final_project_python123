@@ -186,3 +186,24 @@ footer.bg-dark {
     color: #ffefd5 !important;
     margin-bottom: 20px;
 }
+
+.contact-button {
+    padding: 12px 24px;
+    background-color: #444;
+    color: #e0e0e0;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.contact-button:hover {
+    background-color: #595959;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
