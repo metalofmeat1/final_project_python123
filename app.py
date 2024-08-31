@@ -124,29 +124,50 @@ def historical_man_details():
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    username = request.form.get('username')
-    score = 0
-    for question, correct_answer in correct_answers.items():
-        user_answer = request.form.get(question)
-        print(user_answer)
-        if user_answer == correct_answer:
-            score += 1
-    session['username'] = username
-    session['score'] = score
-    new = {username: score}
-    users.update(new)
+    if request.method == 'POST':
+        username = request.form.get('username')
+        score = 0
+        for question, correct_answer in correct_answers.items():
+            user_answer = request.form.get(question)
+            print(user_answer)
+            if user_answer == correct_answer:
+                score += 1
+        insert_to_db(username, score)
+        return render_template('test_leaders.html')
     return render_template('test.html')
 
 
-users = {}
+# users = {}
+
+def init_score():
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS leaders (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        result INTEGER NOT NULL
+                      )''')
+    conn.commit()
+    conn.close()
 
 
-@app.route('/test_leaders', methods=['GET', 'POST'])
+
+def insert_to_db(username, score):
+    connection = sqlite3.connect('users.db')
+    cursor = connection.cursor()
+    cursor.execute(''' INSERT INTO leaders (name, result) VALUES(?, ?) ''', (username, score))
+    connection.commit()
+    connection.close()
+
+
+@app.route('/test_leaders', methods=['GET'])
 def test_leaders():
-    username = session['username']
-    score = session['score']
-    sorted_users = sorted(users.items(), key=lambda x: x[1], reverse=True)
-    return render_template('test_leaders.html', username=username, score=score, champs=sorted_users)
+    with sqlite3.connect('users.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM leaders")
+        champs = cursor.fetchall()
+    print(champs)
+    return render_template('test_leaders.html', champs=champs)
 
 
 if __name__ == '__main__':

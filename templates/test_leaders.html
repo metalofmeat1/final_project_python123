@@ -1,14 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лідери тесту</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .highlight {
+            background-color: #dff0d8;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Відмінна робота!</h1>
-    <p>Ваш результат = {{ score }}</p>
-    {{% for item in champs %}}
-    {{ item }}
-    {% endfor %}
+    <h1>Результати тестування</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Місце</th>
+                <th>Ім'я</th>
+                <th>Результат</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for champ in champs %}
+                <tr class="{{ 'highlight' if loop.index == 1 else '' }}">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ champ[1] }}</td>
+                    <td>{{ champ[2] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('test') }}">Повернутися до тесту</a>
 </body>
 </html>
