@@ -1,9 +1,4 @@
-print("Hello, PYTHON_1y_21_16_09_23_3")
-print("Вова тут :)")
-print('Фімочка тут')
-print('Маша тут')
+from app.routes import app
 
-print('Тест')
-# Фіма
-print("Рома тут ;)")
-print('Roma`s commit')
+if __name__ == '__main__':
+    app.run(debug=True)

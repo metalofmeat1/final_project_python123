@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест з історії</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
+</head>
+<body>
+    <h1>Пройдіть тест</h1>
+    <form id="testForm">
+        <label for="name">Введіть Ваше ім'я:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+        <label for="answer">Ваша відповідь:</label>
+        <input type="text" id="answer" name="answer" required>
+        <br><br>
+        <button type="submit">Відправити</button>
+    </form>
+
+    <div id="leaderboard">
+        <h2>Таблиця лідерів</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ім'я</th>
+                    <th>Бал</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const answer = document.getElementById('answer').value;
+
+            fetch('/submit_test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, answer: answer })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Ваш результат збережено!');
+                    loadLeaderboard();
+                } else {
+                    alert('Сталася помилка під час збереження результату.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Сталася помилка під час збереження результату.');
+            });
+        });
+
+        function loadLeaderboard() {
+            fetch('/leaderboard')
+                .then(response => response.json())
+                .then(leaderboard => {
+                    const tbody = document.querySelector('#leaderboard tbody');
+                    tbody.innerHTML = '';
+                    leaderboard.forEach(entry => {
+                        tbody.innerHTML += `<tr><td>${entry.name}</td><td>${entry.score || '-'}</td></tr>`;
+                    });
+                });
+        }
+
+        window.onload = loadLeaderboard;
+    </script>
+</body>
+</html>

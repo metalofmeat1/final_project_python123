@@ -1,0 +1,60 @@
+body {
+    font-family: 'Georgia', serif;
+    background-color: #1a1a1a;
+    color: #f8f0e3;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+.date {
+    font-size: 18px;
+    color: #ffefd5;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+h1 {
+    font-size: 36px;
+    color: #ffefd5;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 20px;
+    color: #ffffff;
+    max-width: 70%;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+    text-align: center;
+}
+
+img {
+    display: block;
+    max-width: 50%;
+    height: auto;
+    margin: 30px auto;
+    border: none;
+}
+
+a {
+    display: inline-block;
+    font-size: 18px;
+    color: #f8f0e3;
+    background-color: #444;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+a:hover {
+    background-color: #666;
+    transform: scale(1.05);
+}
+

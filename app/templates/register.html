@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: #6f5b44;
+        font-size: 1.8em;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        margin: 0 auto;
+        border: 2px solid #c2a78f;
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #3e3a39;
+        text-align: left;
+    }
+
+    input[type="email"],
+    input[type="text"],
+    input[type="password"],
+    select{
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #c2a78f;
+        border-radius: 0;
+        background-color: #f9f9f9;
+        color: #3e3a39;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4e3a2a;
+        color: #e2dbc6;
+        border: 2px solid #c2a78f;
+        border-radius: 0;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background-color: #3a2d22;
+    }
+
+    p {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    a {
+        color: #6f5b44;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h2>Registration</h2>
+<form method="POST">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br>
+
+    <label for="role">Role:</label>
+    <select id="role" name="role">
+        <option value="admin">admin</option>
+        <option value="super_admin">super admin</option>
+    </select>
+
+    <button type="submit">Register</button>
+</form>
+<p><a href="{{ url_for('login') }}">Log in here</a></p>
+{% endblock %}
