@@ -1,6 +1,6 @@
 import functools
 from flask import session, abort
-from final_project_python123.app.config import ALLOWED_EXTENSIONS
+from app.config import ALLOWED_EXTENSIONS
 
 
 def allowed_file(filename):

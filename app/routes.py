@@ -5,9 +5,9 @@ from flask import render_template, jsonify, request, redirect, url_for, session,
     send_from_directory
 from werkzeug.utils import secure_filename
 import os
-from final_project_python123.app.config import app
-from final_project_python123.app.utilities import role_required
-from final_project_python123.app.work_with_db import get_db_connection, get_history_db_connection, get_figure_detail, \
+from app.config import app
+from app.utilities import role_required
+from app.work_with_db import get_db_connection, get_history_db_connection, get_figure_detail, \
     get_figures, update_figure_in_db, add_figure_to_db
 
 
@@ -202,6 +202,37 @@ def add_event():
     except Exception as e:
         logging.error(f'Error adding event: {e}')
         return jsonify({"status": "error", "message": "Internal Server Error"}), 500
+
+@app.route('/api/search', methods=['GET'])
+def search_events():
+    try:
+        query = request.args.get('query', '')
+        if not query:
+            return jsonify({"error": "Search query cannot be empty"}), 400
+
+        conn = get_history_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM events WHERE name LIKE ?", ('%' + query + '%',))
+        events = cursor.fetchall()
+        conn.close()
+
+        events_list = []
+        for event in events:
+            events_list.append({
+                'id': event[0],
+                'name': event[1],
+                'description': event[2],
+                'date': event[3],
+                'latitude': event[4],
+                'longitude': event[5],
+                'image': url_for('uploaded_file', filename=event[6]) if event[6] else None
+            })
+
+        return jsonify(events_list)
+    except Exception as e:
+        logging.error(f'Error searching events: {e}')
+        return jsonify({"error": "Internal Server Error"}), 500
+
 
 
 @app.route('/test')

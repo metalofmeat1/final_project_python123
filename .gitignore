@@ -15,7 +15,11 @@ __pycache__/
 history.db/
 # C extensions
 *.so
-app/uploads/
+
+
+# app/uploads/
+
+
 # Distribution / packaging
 .Python
 build/

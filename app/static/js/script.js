@@ -20,6 +20,7 @@ function updateTimelineFromInput() {
 }
 
 function loadEventsForYear(year) {
+    eventsList.innerHTML = '';
     fetch(`/api/events?year=${year}`)
         .then(response => response.json())
         .then(events => {
@@ -36,18 +37,29 @@ function loadEventsForYear(year) {
 
 function handleSearchFormSubmit(e) {
     e.preventDefault();
+    var searchForm = document.querySelector('#searchForm');
     var query = document.querySelector('#searchForm input[name="query"]').value;
 
     fetch(`/api/search?query=${encodeURIComponent(query)}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(events => {
-            console.log('Search results:', events); 
-
+            console.log('Search results:', events);
             displaySearchResults(events);
             addMarkers(events);
         })
-        .catch(error => console.error('Error searching events:', error));
+        .catch(error => console.error('Error searching events:', error))
+        .finally(() => {
+            searchForm.reset();
+        });
 }
+
+document.querySelector('#searchForm').addEventListener('submit', handleSearchFormSubmit);
+
 
 function addMarkers(events) {
     markers.forEach(marker => map.removeLayer(marker));
@@ -70,8 +82,9 @@ function addMarkers(events) {
     });
 }
 
+
 function correctImageUrl(imageUrl) {
-    var baseImageUrl = 'app/uploads/';
+    var baseImageUrl = '/uploads/';
 
     if (imageUrl.startsWith(baseImageUrl)) {
         return imageUrl;
@@ -86,7 +99,7 @@ function displaySearchResults(events) {
     eventsList.innerHTML = '';
 
     events.forEach(event => {
-        const imageUrl = correctImageUrl(event.image); // Отримуємо коректний URL зображення
+        const imageUrl = correctImageUrl(event.image); 
 
         const eventElement = document.createElement('div');
         eventElement.className = 'card';
@@ -101,12 +114,10 @@ function displaySearchResults(events) {
 }
 
 
-// Тема для сторінки
 function toggleTheme() {
     document.body.classList.toggle('dark-theme');
 }
 
-// Обробка кліку на карті для отримання координат
 map.on('click', function(e) {
     document.getElementById('latitude').value = e.latlng.lat;
     document.getElementById('longitude').value = e.latlng.lng;
@@ -166,7 +177,6 @@ function fetchEvents() {
 }
 
 function fetchTopResults() {
-    // Тут можна інтегрувати запит до Google Sheets API або іншого API для отримання топ-результатів
     var topResults = [
         { name: "Иван Иванов", score: 95, time: "10:30", latitude: 50.4501, longitude: 30.5234 },
         { name: "Анна Смирнова", score: 90, time: "12:15", latitude: 50.3511, longitude: 30.6324 },
@@ -176,7 +186,6 @@ function fetchTopResults() {
     displayTopResultsOnMap(topResults);
 }
 
-// Відображення топ-результатів на карті
 function displayTopResultsOnMap(topResults) {
     topResults.forEach(result => {
         L.marker([result.latitude, result.longitude]).addTo(map)
@@ -188,5 +197,4 @@ function displayTopResultsOnMap(topResults) {
     });
 }
 
-// Обробка відправки форми пошуку
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
