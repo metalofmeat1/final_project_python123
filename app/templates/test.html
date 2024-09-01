@@ -18,14 +18,33 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('gallery') }}">Постаті</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('test') }}">Тести</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('test_leaders') }}">Таблиця лідерів</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('developers') }}">Розробники</a>
+                    </li>
+                    {% if session.get('role') in ['admin', 'super_admin'] %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('add_figure') }}">Додати постать</a>
+                    </li>
+                    {% endif %}
+                    {% if session.get('role') in ['super_admin'] %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">Зареєструвати нового адміна</a>
+                    </li>
+                    {% endif %}
                 </ul>
+                <span class="navbar-text">
+                    <a class="contact-button" href="https://t.me/feedback_website123_bot" target="_blank">Зв'язатися</a>
+                </span>
             </div>
         </div>
     </nav>

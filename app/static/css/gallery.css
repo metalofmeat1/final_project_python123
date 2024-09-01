@@ -4,29 +4,29 @@ html {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #1f1f1f;
-  color: #ffffff; 
+  color: #ffffff;
 }
 
 /* Стилі для main */
 main {
-  background-color: #1f1f1f; 
-  color: #ffffff; 
+  background-color: #1f1f1f;
+  color: #ffffff;
   padding: 20px;
   border-radius: 8px;
 }
 
 
 h1, h2, h3, h4, h5, h6 {
-  color: #ffffff; 
+  color: #ffffff;
 }
 
 a {
-  color: #ffffff; 
-  text-decoration: none; 
+  color: #ffffff;
+  text-decoration: none;
 }
 
 a:hover {
-  color: #dddddd; 
+  color: #dddddd;
 }
 
 #figures {
@@ -38,7 +38,7 @@ a:hover {
 }
 
 #figures img {
-  border: 2px solid #444444; 
+  border: 2px solid #444444;
   max-height: 300px;
   object-fit: cover;
   border-radius: 8px;
@@ -50,10 +50,10 @@ a:hover {
 
 
 footer {
-  background-color: #1f1f1f; 
-  color: #ffffff; 
+  background-color: #1f1f1f;
+  color: #ffffff;
   text-align: center;
-  padding: 10px 0; 
+  padding: 10px 0;
   position: fixed;
   width: 100%;
   bottom: 0;
